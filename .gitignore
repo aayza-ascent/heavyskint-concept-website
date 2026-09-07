@@ -40,3 +40,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Impeccable: platform-specific binary, re-downloaded by `npx impeccable install`
+.claude/skills/impeccable/scripts/bin/
