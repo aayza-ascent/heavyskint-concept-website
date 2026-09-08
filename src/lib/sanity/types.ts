@@ -11,6 +11,8 @@ export type Show = {
   soldOut: boolean;
   cancelled: boolean;
   supportActs?: string[];
+  /** Promoter or festival the show runs under, where one is named. */
+  presentedBy?: string;
 };
 
 export type ReleaseLink = {

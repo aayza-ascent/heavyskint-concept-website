@@ -8,7 +8,7 @@ const SHOW_FIELDS = /* groq */ `
   _id, date, venue, city, country, ticketUrl,
   "soldOut": coalesce(soldOut, false),
   "cancelled": coalesce(cancelled, false),
-  supportActs
+  supportActs, presentedBy
 `;
 
 /**
