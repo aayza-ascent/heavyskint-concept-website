@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Cancel superseded runs on the same branch: nobody needs the results of a
+# commit that has already been replaced.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    # No secrets are set here on purpose.
+    #
+    # The site is built to render empty states when Sanity and Shopify are
+    # unconfigured (see env.isConfigured and lib/safe.ts), so an unsecreted
+    # build is a real test of that path rather than a workaround. It also means
+    # a fork's pull request can be checked without handing it store credentials.
+    #
+    # The one value the build genuinely wants is the canonical origin, used for
+    # metadataBase, OG image URLs and the sitemap.
+    env:
+      NEXT_PUBLIC_SITE_URL: https://example.invalid
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Build
+        run: pnpm build
+
+      # The design detector. Scans source for the anti-patterns that a
+      # typecheck cannot see -- unreadable contrast pairs, dead spacing rhythm,
+      # overflow. Exits 2 on findings, so a regression in the design system
+      # fails the build rather than shipping quietly.
+      - name: Design detector
+        run: pnpm detect

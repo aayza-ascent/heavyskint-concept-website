@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "seed": "node sanity/seed.mts"
+    "seed": "node sanity/seed.mts",
+    "detect": "./.claude/skills/impeccable/scripts/impeccable detect src"
   },
   "dependencies": {
     "@sanity/client": "^8.5.0",
