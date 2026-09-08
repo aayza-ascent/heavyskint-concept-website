@@ -1,5 +1,26 @@
+import type { Metadata } from "next";
+import { absoluteUrl } from "@/lib/site";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { SiteFooter } from "@/components/site/SiteFooter";
+
+/**
+ * Advertises the releases feed to anything that looks for one.
+ *
+ * Declared on the site group rather than the root layout on purpose. Root
+ * metadata is also resolved for /studio/[[...tool]], and `alternates` there
+ * turns metadata resolution into uncached runtime data on an optional
+ * catch-all route, which fails the prerender. It is the right scope regardless:
+ * the Studio is the band's editor and has no business advertising an RSS feed.
+ */
+export const metadata: Metadata = {
+  alternates: {
+    types: {
+      "application/rss+xml": [
+        { url: absoluteUrl("/releases.xml"), title: "heavyskint. — releases" },
+      ],
+    },
+  },
+};
 
 /**
  * The public site shell.
