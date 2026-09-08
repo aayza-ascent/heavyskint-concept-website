@@ -1,0 +1,126 @@
+/**
+ * heavyskint — design tokens
+ *
+ * The single source of truth for the visual system. DESIGN.md is the contract;
+ * this file is its machine-readable mirror, so a brand tweak stays a one-file
+ * change. Every colour below was measured from the band's own published work
+ * (157 images) rather than chosen — the provenance for each is in DESIGN.md and
+ * `.impeccable/design.json`.
+ *
+ * Do not add a hue here. Mean saturation across all band-authored imagery
+ * measures 0.000; a coloured token would be a defect, not a feature.
+ */
+
+:root {
+  /* ── Colour ───────────────────────────────────────────────
+     Contrast against --hs-ink, measured: flash 19.16:1,
+     bone 15.28:1, ink-white 14.78:1, smoke 5.12:1, ash 1.33:1.  */
+
+  /* True black. The floor of every release artwork. Only where photography
+     bleeds to nothing — never as the page ground. */
+  --hs-void: #000000;
+
+  /* The page ground. Darkest 1% of the London poster. Faintly warm, which is
+     what keeps a full-bleed page from reading as a switched-off screen. */
+  --hs-ink: #0f0f10;
+
+  /* One tonal step up. Median of the London poster. Cards, fields, hovered
+     rows — this is how depth is built, since the system has no shadows. */
+  --hs-ink-raised: #1c1c1e;
+
+  /* Tonal separation ONLY. At 1.33:1 on the ground it is invisible as a
+     functional edge. Never use it for a border a user must perceive. */
+  --hs-ash: #2a2a2a;
+
+  /* Secondary text, functional dividers, disabled states. The darkest value
+     in the system a user can actually be asked to perceive (5.12:1). */
+  --hs-smoke: #848484;
+
+  /* Default text. The off-white the wordmark genuinely prints as, measured
+     from the brightest 1% of the London poster. Not pure white, on purpose. */
+  --hs-ink-white: #e2e2e1;
+
+  /* Photocopier paper, from the McChuills handbill. The only warm value in
+     the system, and its loudest gesture: knocked-out bars and primary actions. */
+  --hs-bone: #e9e6d5;
+
+  /* The warm mid-grey of the paper sheet. Secondary text on bone surfaces
+     only (7.61:1). Never on the dark ground. */
+  --hs-paper-shadow: #484540;
+
+  /* Genuine blown highlight of the live photography. Maximum emphasis,
+     rationed to one element per viewport. */
+  --hs-flash: #ffffff;
+
+  /* ── Type ─────────────────────────────────────────────────
+     One family throughout. The posters use no monospace, no serif and no
+     script, so the system has none. Archivo's width axis is what matches the
+     wordmark's wide squarish bowls — a normal-width grotesque set heavy reads
+     too condensed against it. Interim, SIL OFL, pending the band's licences. */
+  --hs-font: var(--font-archivo), "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  --hs-display-size: clamp(3rem, 13vw, 11rem);
+  --hs-display-weight: 900;
+  --hs-display-leading: 0.85;
+  --hs-display-tracking: -0.04em;
+  --hs-display-width: 110;
+
+  --hs-headline-size: clamp(2rem, 6vw, 4rem);
+  --hs-headline-weight: 800;
+  --hs-headline-leading: 0.92;
+  --hs-headline-tracking: -0.03em;
+  --hs-headline-width: 105;
+
+  --hs-title-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  --hs-title-weight: 700;
+  --hs-title-leading: 1.05;
+  --hs-title-tracking: -0.015em;
+
+  --hs-body-size: 1.0625rem;
+  --hs-body-weight: 400;
+  --hs-body-leading: 1.5;
+  --hs-body-measure: 66ch;
+
+  --hs-label-size: 0.75rem;
+  --hs-label-weight: 700;
+  --hs-label-leading: 1;
+  --hs-label-tracking: 0.08em;
+
+  /* ── Space ────────────────────────────────────────────────
+     Bimodal on purpose. Related information packs tight; unrelated blocks are
+     separated by a lot of nothing. There is deliberately no medium step —
+     even spacing throughout reads as a web page, and the tight-then-empty
+     alternation is what reads as a poster. */
+  --hs-space-hair: 4px;
+  --hs-space-tight: 8px;
+  --hs-space-block: 16px;
+  --hs-space-step: 24px;
+  --hs-space-gap: 48px;
+  --hs-space-void: 96px;
+  --hs-space-chasm: 160px;
+
+  /* Page gutter. 6–7% of viewport on the posters — the wordmark begins ~90px
+     into a 1350px sheet. A tight gutter, not a comfortable one. */
+  --hs-gutter: clamp(16px, 6vw, 72px);
+
+  /* ── Form ─────────────────────────────────────────────────
+     Zero radius is an invariant, not a default to be overridden. There is not
+     one rounded corner in 157 images. */
+  --hs-radius: 0px;
+  --hs-hairline: 1px;
+
+  /* ── Motion ───────────────────────────────────────────────
+     Stepped, never eased. Nothing in this world has a soft ease. The grain is
+     static by decision — never animate it. */
+  --hs-cut-fast: 120ms steps(2, end);
+  --hs-cut-slow: 200ms steps(3, end);
+
+  /* ── Texture ──────────────────────────────────────────────
+     The system's texture primitive: tiled 1-bit threshold noise. Edges
+     dissolve into scattered dots; they never fade in a gradient. Density stays
+     fixed in device pixels as the viewport grows, so it reads as print rather
+     than as a texture image that scales with the layout. */
+  --hs-dither: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 1 0 0 0 -0.58'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)'/%3E%3C/svg%3E");
+  --hs-dither-opacity: 0.42;
+  --hs-dither-opacity-strong: 0.6;
+}

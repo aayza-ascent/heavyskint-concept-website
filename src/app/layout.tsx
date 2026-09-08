@@ -1,35 +1,39 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Archivo } from "next/font/google";
 import "./globals.css";
 
 /**
- * Placeholder typefaces.
+ * Archivo, variable across weight and width.
  *
- * Replaced in Phase 0/4 with the band's own faces, once web-embedding licences
- * are confirmed. Kept generic on purpose so nobody mistakes this for a design
- * decision.
+ * One family carries the whole system: the posters use no monospace, no serif
+ * and no script, so neither does the site. The width axis is the reason this
+ * face and not another — the wordmark is notably wide, and a normal-width
+ * grotesque set heavy reads too condensed beside it.
+ *
+ * INTERIM. Chosen because it is SIL OFL licensed and therefore carries no
+ * web-embedding risk while the band's own typeface licences are unconfirmed.
+ * Self-hosted by next/font, so no request leaves for Google.
  */
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const archivo = Archivo({
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  axes: ["wdth"],
+  variable: "--font-archivo",
+  display: "swap",
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
+  // The name is always lowercase and always carries its full stop.
   title: {
-    default: "Heavyskint",
-    template: "%s — Heavyskint",
+    default: "heavyskint.",
+    template: "%s — heavyskint.",
   },
-  description: "Official site of Heavyskint — shows, music and merch.",
+  description:
+    "heavyskint are a five-piece from Glasgow. Shows, music and merch.",
   openGraph: {
-    siteName: "Heavyskint",
+    siteName: "heavyskint.",
     locale: "en_GB",
     type: "website",
   },
@@ -42,9 +46,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en-GB"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${archivo.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">{children}</body>
     </html>
   );
 }

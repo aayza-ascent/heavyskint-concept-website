@@ -1,0 +1,381 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-07T10:27:27.122828Z",
+  "title": "Design System: heavyskint",
+  "extensions": {
+    "colorMeta": {
+      "void": {
+        "role": "neutral",
+        "displayName": "Void",
+        "canonical": "#000000",
+        "tonalRamp": [
+          "#262626",
+          "#434343",
+          "#616161",
+          "#7E7E7E",
+          "#9B9B9B",
+          "#B8B8B8",
+          "#D5D5D5",
+          "#F2F2F2"
+        ],
+        "source": "Measured floor of every release artwork (dark 1% = #010101 or lower)."
+      },
+      "ink": {
+        "role": "primary",
+        "displayName": "Ink",
+        "canonical": "#0F0F10",
+        "tonalRamp": [
+          "#262627",
+          "#434344",
+          "#606061",
+          "#7D7D7E",
+          "#9A9A9B",
+          "#B8B8B9",
+          "#D5D5D6",
+          "#F2F2F3"
+        ],
+        "source": "Darkest 1% of the London / Elephant's Head poster. The page ground."
+      },
+      "ink-raised": {
+        "role": "neutral",
+        "displayName": "Ink Raised",
+        "canonical": "#1C1C1E",
+        "tonalRamp": [
+          "#262628",
+          "#434345",
+          "#606062",
+          "#7D7D7F",
+          "#9A9A9C",
+          "#B7B7B9",
+          "#D4D4D6",
+          "#F2F2F4"
+        ],
+        "source": "Median of the London poster. One tonal step above the ground."
+      },
+      "ash": {
+        "role": "neutral",
+        "displayName": "Ash",
+        "canonical": "#2A2A2A",
+        "tonalRamp": [
+          "#262626",
+          "#434343",
+          "#616161",
+          "#7E7E7E",
+          "#9B9B9B",
+          "#B8B8B8",
+          "#D5D5D5",
+          "#F2F2F2"
+        ],
+        "source": "Median of the King Tut's poster and the SWG3 live frame. 1.33:1 on ink - tonal layering only, never a border."
+      },
+      "smoke": {
+        "role": "neutral",
+        "displayName": "Smoke",
+        "canonical": "#848484",
+        "tonalRamp": [
+          "#262626",
+          "#434343",
+          "#616161",
+          "#7E7E7E",
+          "#9B9B9B",
+          "#B8B8B8",
+          "#D5D5D5",
+          "#F2F2F2"
+        ],
+        "source": "Midtones of the awards-night photograph. 5.12:1 on ink - the darkest value a user can be asked to perceive."
+      },
+      "ink-white": {
+        "role": "neutral",
+        "displayName": "Ink White",
+        "canonical": "#E2E2E1",
+        "tonalRamp": [
+          "#272726",
+          "#444443",
+          "#616160",
+          "#7E7E7D",
+          "#9B9B9A",
+          "#B8B8B7",
+          "#D5D5D4",
+          "#F3F3F2"
+        ],
+        "source": "Brightest 1% of the London poster - the off-white the wordmark actually prints as. 14.78:1 on ink."
+      },
+      "bone": {
+        "role": "primary",
+        "displayName": "Bone",
+        "canonical": "#E9E6D5",
+        "tonalRamp": [
+          "#2E2B1A",
+          "#4B4837",
+          "#686554",
+          "#858271",
+          "#A29F8E",
+          "#C0BDAC",
+          "#DDDAC9",
+          "#FAF7E6"
+        ],
+        "source": "Photocopier paper of the McChuills handbill. The only warm value in the system. Ink on bone reads 15.28:1."
+      },
+      "paper-shadow": {
+        "role": "neutral",
+        "displayName": "Paper Shadow",
+        "canonical": "#484540",
+        "tonalRamp": [
+          "#2A2722",
+          "#47443F",
+          "#64615C",
+          "#817E79",
+          "#9E9B96",
+          "#BCB9B4",
+          "#D9D6D1",
+          "#F6F3EE"
+        ],
+        "source": "Median of the McChuills paper sheet. Secondary text on bone surfaces only (7.61:1)."
+      },
+      "flash": {
+        "role": "tertiary",
+        "displayName": "Flash",
+        "canonical": "#FFFFFF",
+        "tonalRamp": [
+          "#262626",
+          "#434343",
+          "#616161",
+          "#7E7E7E",
+          "#9B9B9B",
+          "#B8B8B8",
+          "#D5D5D5",
+          "#F2F2F2"
+        ],
+        "source": "Genuine blown highlight of the live photography. Rationed to one element per viewport."
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Lowercase, page-defining statements only. Sized until it nearly touches both edges of its measure."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Lowercase section openings and show titles."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Venue and product names in lists, where display size would break the scan."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Bio, release notes, product and policy copy. Held to 62-70ch. The one relaxed surface in a compressed system."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "The poster's metadata voice: dates, ticket states, sizes, prices, credits, button text. Uppercase, tracking 0.08em, leading 1.0."
+      }
+    },
+    "motion": [
+      {
+        "name": "cut-fast",
+        "value": "120ms steps(2, end)",
+        "purpose": "Default state transition. Stepped rather than eased - nothing in this world has a soft ease."
+      },
+      {
+        "name": "cut-slow",
+        "value": "200ms steps(3, end)",
+        "purpose": "Larger surface changes such as the mobile menu overlay."
+      },
+      {
+        "name": "no-noise-motion",
+        "value": "none",
+        "purpose": "The dither is static by decision. Never animate the grain."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      }
+    ],
+    "texture": [
+      {
+        "name": "dither-overlay",
+        "value": "url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22140%22 height=%22140%22%3E%3Cfilter id=%22g%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3CfeColorMatrix type=%22matrix%22 values=%220 0 0 0 1 0 0 0 0 1 0 0 0 0 1 1 0 0 0 -0.58%22/%3E%3C/filter%3E%3Crect width=%22140%22 height=%22140%22 filter=%22url(%23g)%22/%3E%3C/svg%3E')",
+        "purpose": "The system's texture primitive: a tiled 1-bit threshold noise applied at opacity 0.42 with mix-blend-mode: screen. Sits over every surface, statically. Grain density stays fixed in device pixels as the viewport grows."
+      }
+    ],
+    "assetsPending": [
+      {
+        "name": "wordmark-svg",
+        "path": "public/wordmark/heavyskint.svg",
+        "note": "Traced from the poster raster as an interim. The band's true vector logo with lockups and clear-space rules is still outstanding per PRODUCT.md."
+      },
+      {
+        "name": "licensed-typefaces",
+        "note": "Archivo (SIL OFL) is an interim pairing chosen to carry no web-embedding risk while the band's own typeface licences remain unconfirmed."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button (Poster Bar)",
+      "kind": "button",
+      "refersTo": "button-poster",
+      "description": "The knocked-out bone bar. Every buy, ticket and add-to-bag action.",
+      "html": "<button class=\"ds-btn-poster\">GET TICKETS</button>",
+      "css": ".ds-btn-poster { font-family: 'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 700; font-size: 0.75rem; line-height: 1; letter-spacing: 0.08em; text-transform: uppercase; background: #E9E6D5; color: #0F0F10; border: none; border-radius: 0; padding: 16px 28px; cursor: pointer; transition: background 120ms steps(2, end), color 120ms steps(2, end); } .ds-btn-poster:hover { background: #FFFFFF; color: #000000; } .ds-btn-poster:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 2px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary action. Smoke hairline on the ink ground; fills one tonal step on hover.",
+      "html": "<button class=\"ds-btn-ghost\">ALL SHOWS</button>",
+      "css": ".ds-btn-ghost { font-family: 'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 700; font-size: 0.75rem; line-height: 1; letter-spacing: 0.08em; text-transform: uppercase; background: transparent; color: #E2E2E1; border: 1px solid #848484; border-radius: 0; padding: 16px 28px; cursor: pointer; transition: background 120ms steps(2, end), color 120ms steps(2, end); } .ds-btn-ghost:hover { background: #1C1C1E; color: #FFFFFF; } .ds-btn-ghost:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 2px; }"
+    },
+    {
+      "name": "Sold Out Tag",
+      "kind": "chip",
+      "refersTo": "tag-soldout",
+      "description": "The knocked-out bar at its smallest. SOLD OUT and CANCELLED both take bone; LAST TICKETS takes the ghost treatment.",
+      "html": "<span class=\"ds-tag-soldout\">SOLD OUT</span> <span class=\"ds-tag-warn\">LAST TICKETS</span>",
+      "css": ".ds-tag-soldout, .ds-tag-warn { font-family: 'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 700; font-size: 0.6875rem; line-height: 1; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 0; padding: 4px 8px; display: inline-block; } .ds-tag-soldout { background: #E9E6D5; color: #0F0F10; } .ds-tag-warn { background: transparent; color: #E2E2E1; border: 1px solid #848484; }"
+    },
+    {
+      "name": "Show Row",
+      "kind": "card",
+      "refersTo": "card-show",
+      "description": "Signature listing block. Transparent on the ink ground with a single smoke hairline divider, so a stack of shows reads as a poster's listing rather than a set of floating panels. Date in label type, venue in title type.",
+      "html": "<div class=\"ds-show-row\"><div class=\"ds-show-date\">SAT 10 OCT 2026</div><div class=\"ds-show-venue\">tenement trail</div><div class=\"ds-show-city\">GLASGOW</div><button class=\"ds-btn-poster ds-show-cta\">GET TICKETS</button></div>",
+      "css": ".ds-show-row { display: grid; grid-template-columns: 1fr auto; gap: 8px 24px; align-items: baseline; background: transparent; border-top: 1px solid #848484; border-radius: 0; padding: 24px 0; } .ds-show-date { font-family: 'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 700; font-size: 0.75rem; line-height: 1; letter-spacing: 0.08em; text-transform: uppercase; color: #848484; grid-column: 1; } .ds-show-venue { font-family: 'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 700; font-size: 1.5rem; line-height: 1.05; letter-spacing: -0.015em; color: #E2E2E1; grid-column: 1; } .ds-show-city { font-family: 'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 700; font-size: 0.75rem; line-height: 1; letter-spacing: 0.08em; text-transform: uppercase; color: #848484; grid-column: 1; } .ds-show-cta { grid-column: 2; grid-row: 1 / span 3; align-self: center; } .ds-show-row:hover .ds-show-venue { color: #FFFFFF; }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Booking-enquiry field. Label sits above, never as a placeholder - the contact form is a promoter's route in and has to survive being half-filled.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">VENUE / PROMOTER</span><input class=\"ds-input\" type=\"text\" value=\"\" placeholder=\"\"></label>",
+      "css": ".ds-field { display: block; } .ds-field-label { display: block; font-family: 'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 700; font-size: 0.75rem; line-height: 1; letter-spacing: 0.08em; text-transform: uppercase; color: #848484; margin-bottom: 8px; } .ds-input { font-family: 'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 400; font-size: 1.0625rem; line-height: 1.5; background: #1C1C1E; color: #FFFFFF; border: 1px solid #848484; border-radius: 0; padding: 14px 16px; width: 100%; transition: border-color 120ms steps(2, end); } .ds-input:focus { outline: none; border-color: #FFFFFF; border-width: 2px; padding: 13px 15px; }"
+    },
+    {
+      "name": "Navigation Bar",
+      "kind": "nav",
+      "refersTo": null,
+      "description": "Label-type routes along the top gutter. The active route gets a bone bar behind it - the knocked-out bar doing duty as the current-page indicator. The wordmark at the left is a traced SVG in production; stood in with tight-tracked type here.",
+      "html": "<nav class=\"ds-nav\"><span class=\"ds-nav-mark\">heavyskint.</span><a class=\"ds-nav-link ds-nav-link--active\" href=\"#\">SHOWS</a><a class=\"ds-nav-link\" href=\"#\">MUSIC</a><a class=\"ds-nav-link\" href=\"#\">MERCH</a><a class=\"ds-nav-link\" href=\"#\">CONTACT</a></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; gap: 24px; background: #0F0F10; padding: 16px 0; } .ds-nav-mark { font-family: 'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 900; font-size: 1.5rem; line-height: 1; letter-spacing: -0.04em; color: #E2E2E1; margin-right: auto; } .ds-nav-link { font-family: 'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 700; font-size: 0.75rem; line-height: 1; letter-spacing: 0.08em; text-transform: uppercase; color: #E2E2E1; text-decoration: none; padding: 6px 8px; border-radius: 0; transition: color 120ms steps(2, end); } .ds-nav-link:hover { color: #FFFFFF; } .ds-nav-link--active { background: #E9E6D5; color: #0F0F10; } .ds-nav-link:focus-visible { outline: 2px solid #FFFFFF; outline-offset: 2px; }"
+    },
+    {
+      "name": "Hero Display Block",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Signature composition: display type filling the measure at leading 0.85, metadata stacked beneath in label type, dither over the whole surface. The grain overlay here is the system's texture primitive - reuse it on every surface.",
+      "html": "<section class=\"ds-hero ds-grain\"><h1 class=\"ds-hero-display\">king tuts.</h1><div class=\"ds-hero-meta\">SAT 10 JAN 2026<br>GLASGOW<br>SOLD OUT</div></section>",
+      "css": ".ds-hero { position: relative; overflow: hidden; background: #0F0F10; padding: 48px 24px; } .ds-hero-display { font-family: 'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 900; font-size: clamp(3rem, 13vw, 11rem); line-height: 0.85; letter-spacing: -0.04em; font-stretch: 110%; color: #E2E2E1; margin: 0 0 24px; } .ds-hero-meta { font-family: 'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 700; font-size: 0.75rem; line-height: 1; letter-spacing: 0.08em; text-transform: uppercase; color: #848484; } .ds-grain::after { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22140%22 height=%22140%22%3E%3Cfilter id=%22g%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3CfeColorMatrix type=%22matrix%22 values=%220 0 0 0 1 0 0 0 0 1 0 0 0 0 1 1 0 0 0 -0.58%22/%3E%3C/filter%3E%3Crect width=%22140%22 height=%22140%22 filter=%22url(%23g)%22/%3E%3C/svg%3E'); background-repeat: repeat; opacity: 0.42; mix-blend-mode: screen; }"
+    },
+    {
+      "name": "Merch Card",
+      "kind": "card",
+      "refersTo": null,
+      "description": "The one place a card genuinely lifts to ink-raised, because a product grid needs its items bounded. Hard rectangle image, no radius, price in label type.",
+      "html": "<article class=\"ds-merch\"><div class=\"ds-merch-img ds-grain\"></div><h3 class=\"ds-merch-title\">tour tee</h3><div class=\"ds-merch-price\">£25.00</div></article>",
+      "css": ".ds-merch { background: #1C1C1E; border: 1px solid #848484; border-radius: 0; padding: 0 0 16px; width: 220px; transition: border-color 120ms steps(2, end); } .ds-merch:hover { border-color: #FFFFFF; } .ds-merch-img { position: relative; overflow: hidden; aspect-ratio: 4 / 5; background: #0F0F10; margin-bottom: 16px; } .ds-merch-title { font-family: 'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 700; font-size: 1.25rem; line-height: 1.05; letter-spacing: -0.015em; color: #E2E2E1; margin: 0 16px 8px; } .ds-merch-price { font-family: 'Archivo', 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 700; font-size: 0.75rem; line-height: 1; letter-spacing: 0.08em; text-transform: uppercase; color: #848484; margin: 0 16px; } .ds-grain::after { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22140%22 height=%22140%22%3E%3Cfilter id=%22g%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.85%22 numOctaves=%224%22 stitchTiles=%22stitch%22/%3E%3CfeColorMatrix type=%22matrix%22 values=%220 0 0 0 1 0 0 0 0 1 0 0 0 0 1 1 0 0 0 -0.58%22/%3E%3C/filter%3E%3Crect width=%22140%22 height=%22140%22 filter=%22url(%23g)%22/%3E%3C/svg%3E'); background-repeat: repeat; opacity: 0.42; mix-blend-mode: screen; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Photocopied Dark",
+    "overview": "This system was not invented. It was measured out of 157 images the band has already published, and every value traces to a specific file. The band's world is a near-black field - their release artwork sits at a median luminance of 6-13 out of 255, with 67-76% of every frame below L=24 - with one lit subject in it and nothing else. Over that field lies photocopier grain: not a smooth gradient but a 1-bit dither, where white shapes dissolve at their edges into scattered dots. The wordmark, heavyskint., prints in eroded off-white ink with the paper's tooth eating into the letterforms.\n\nThe site is that surface. Black is not a dark theme here; it is the ground the photography was shot against, and it should occupy most of every viewport the way it occupies most of every frame. Type is set large, lowercase, and tight enough to nearly touch the edges, the way it sits on the gig posters. Where something needs to be pressed, it is a knocked-out bone bar with black uppercase type in it - poster furniture, cut from paper, never a rounded UI button. Nothing has a corner radius. Nothing casts a shadow.\n\nThe restraint is not minimalism. It is a room with the lights off and a flash going off in it. The photography - a crowd surfing at a sold-out King Tut's, a silhouette against blown-white smoke, a kneeling figure in front of a wall of CRT static - carries all the volume. The interface exists to get out of its way and then, at the two or three moments that matter, to hit hard.",
+    "keyCharacteristics": [
+      "Achromatic by measurement, not by taste: every band-authored image scores 0.000 mean saturation.",
+      "Near-black ground (#0F0F10), with the true void (#000000) reserved for where photography bleeds away.",
+      "Photocopier dither over the whole interface - edges dissolve into dots, they never fade.",
+      "Lowercase display type, negative tracking, leading below 1.0; uppercase reserved for metadata.",
+      "Zero corner radius, zero shadows, hard rectangles throughout.",
+      "One warm note in the entire palette: bone photocopier paper (#E9E6D5).",
+      "Real photography only, always credited. The band has 157 images and a working photographer."
+    ],
+    "rules": [
+      {
+        "name": "The Zero Chroma Rule",
+        "section": "colors",
+        "body": "Mean saturation across all band-authored imagery measures 0.000. There is no accent colour, no hue-based state colour, and no coloured link. A red error message, a green success tick, or a blue focus ring is a defect in this system, not an accessibility affordance - carry state in weight, luminance, dither density, and the bone bar instead. The only permitted warmth is bone (#E9E6D5) and paper shadow (#484540), and both come from paper, not from ink."
+      },
+      {
+        "name": "The Ash Is Not A Border Rule",
+        "section": "colors",
+        "body": "Ash (#2A2A2A) sits at 1.33:1 against the ground - well under the 3:1 needed for a perceivable non-text edge. It is a tonal-layering value only. Any border, divider, or outline a user must actually see is drawn in smoke (#848484, 5.12:1). Getting this backwards produces a page that looks correct on a design monitor and has invisible structure on a phone in daylight, which is exactly where the primary visitor is."
+      },
+      {
+        "name": "The Flash Rationing Rule",
+        "section": "colors",
+        "body": "Pure white (#FFFFFF) appears on no more than one element per viewport. Everything else that reads as white is ink white (#E2E2E1). The gap between the two is small enough to feel like a printing artefact and large enough to establish a top of the hierarchy."
+      },
+      {
+        "name": "The Lowercase Rule",
+        "section": "typography",
+        "body": "The band's name is always heavyskint., lowercase, carrying its terminal full stop - including sentence-initial, in the <title> tag, and in navigation. Display and headline type is lowercase too. Uppercase exists in exactly one place: the label role, for metadata. A lowercase label or an uppercase headline both break the system."
+      },
+      {
+        "name": "The Fill The Measure Rule",
+        "section": "typography",
+        "body": "Display type is sized until it nearly touches both edges of its container, the way the wordmark spans the full width of every poster. A display line sitting at 60% of its available width with comfortable margins is the single fastest way to make this world look like a generic dark template. If the text is short, the type gets bigger; it does not get centred in white space."
+      },
+      {
+        "name": "The Sub-Unity Leading Rule",
+        "section": "typography",
+        "body": "Multi-line display and headline type sets at leading below 1.0 (0.85 display, 0.92 headline) so the lines lock into a single block, as the stacked metadata does on the London poster. Body copy is the exception at 1.5."
+      },
+      {
+        "name": "The No Shadow Rule",
+        "section": "elevation",
+        "body": "Zero box-shadow, zero filter: drop-shadow, zero text-shadow anywhere in the system. If an element needs to separate from its ground, move it one tonal step, change its grain density, or put a bone bar behind it."
+      },
+      {
+        "name": "The Grain Is The Interface Rule",
+        "section": "elevation",
+        "body": "The dither sits over the entire page, not only over photographs - ground, panel edges, and the transitions between sections. It is static, never animated. The audit test: screenshot any 200x200px region of any page at any scroll position and it should contain visible noise. A clean flat black region is a defect."
+      },
+      {
+        "name": "The Zero Radius Rule",
+        "section": "shapes",
+        "body": "border-radius: 0 on every element without exception, including avatars, image masks, and form controls. Not a default to be overridden per component - an invariant."
+      },
+      {
+        "name": "The Dissolve Rule",
+        "section": "shapes",
+        "body": "Edges break into dither, they never fade in a gradient. A linear-gradient fade to transparent is the wrong mechanic in this world; the correct one is a threshold mask over noise, so the boundary scatters into dots the way the photocopy does."
+      }
+    ],
+    "dos": [
+      "Do let black hold the majority of every viewport. Their artwork is 67-76% below L=24; a viewport that is mostly content is off-world.",
+      "Do put the dither over everything, statically. The audit test: any 200x200px region of any page contains visible noise.",
+      "Do set the band's name as heavyskint. - lowercase, with the full stop - everywhere, including the <title> tag and navigation.",
+      "Do size display type until it nearly touches both edges of its measure. Short text gets bigger type, not more margin.",
+      "Do draw every functional border in smoke (#848484) at 1px, and keep ash (#2A2A2A) for tonal layering only.",
+      "Do use the knocked-out bone bar for the things that matter most: primary actions, sold-out flags, the active nav item.",
+      "Do honour 4:5 and 1:1 image ratios, and credit the photographer on every image (@danielblakevisuals and others appear throughout the archive).",
+      "Do hold reading copy to 62-70ch at leading 1.5 - the one relaxed surface in a compressed system."
+    ],
+    "donts": [
+      "Don't introduce any hue. Measured saturation across all band-authored imagery is 0.000, so a red error, a green success state, or a blue link is a defect. State lives in weight, luminance, grain density, and the bone bar.",
+      "Don't apply a corner radius to anything, including images, avatars, and form controls.",
+      "Don't use box-shadow, drop-shadow, or text-shadow. Depth is tonal layering, grain density, and the dissolve.",
+      "Don't fade an edge with a linear gradient. Edges dissolve into scattered dots.",
+      "Don't animate the grain. The texture is a print artefact, and moving it turns a photocopy into a screensaver.",
+      "Don't use #000000 as the page ground. The ground is ink (#0F0F10); the void is for where photography bleeds away.",
+      "Don't use pure white (#FFFFFF) for body copy. Their printed white is ink white (#E2E2E1); flash is rationed to one element per viewport.",
+      "Don't set the wordmark in a typeface. It is a traced SVG, and its erosion is the point.",
+      "Don't treat promoter artwork as brand authority. The No A Mean City coral-and-blue, the Tenement Trail green, and the Slay Sessions oxblood belong to those promoters, not to this band.",
+      "Don't use stock or AI-generated imagery. There are 157 real photographs and a working photographer; substituting either would break the one thing this band's site has going for it."
+    ]
+  }
+}

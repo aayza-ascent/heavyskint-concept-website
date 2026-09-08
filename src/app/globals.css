@@ -1,26 +1,273 @@
 @import "tailwindcss";
+@import "../styles/tokens.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/**
+ * Tailwind theme mapping.
+ *
+ * Tokens live in ../styles/tokens.css and are the source of truth; this block
+ * only exposes them to Tailwind's utility generator. Never redeclare a value
+ * here — reference the token.
+ */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-void: var(--hs-void);
+  --color-ink: var(--hs-ink);
+  --color-ink-raised: var(--hs-ink-raised);
+  --color-ash: var(--hs-ash);
+  --color-smoke: var(--hs-smoke);
+  --color-ink-white: var(--hs-ink-white);
+  --color-bone: var(--hs-bone);
+  --color-paper-shadow: var(--hs-paper-shadow);
+  --color-flash: var(--hs-flash);
+
+  --font-sans: var(--hs-font);
+
+  --spacing-hair: var(--hs-space-hair);
+  --spacing-tight: var(--hs-space-tight);
+  --spacing-block: var(--hs-space-block);
+  --spacing-step: var(--hs-space-step);
+  --spacing-gap: var(--hs-space-gap);
+  --spacing-void: var(--hs-space-void);
+  --spacing-chasm: var(--hs-space-chasm);
+  --spacing-gutter: var(--hs-gutter);
+
+  --radius-none: 0px;
 }
 
-@media (prefers-color-scheme: dark) {
+/*
+ * Base and component styles are layered on purpose. Tailwind establishes
+ * `@layer theme, base, components, utilities`, and an UNLAYERED rule beats every
+ * layered one regardless of specificity — so a bare `a { color: inherit }` outside
+ * a layer silently overrides `text-ink` on every link. Keep these inside the
+ * layers so utilities stay able to override them.
+ */
+@layer base {
+  /**
+   * The world is committed to a single look: a near-black photocopied field.
+   * There is deliberately no light theme — the ground is the surface the
+   * photography was shot against, not a user preference.
+   */
+  html {
+    background: var(--hs-ink);
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--hs-ink);
+    color: var(--hs-ink-white);
+    font-family: var(--hs-font);
+    font-size: var(--hs-body-size);
+    font-weight: var(--hs-body-weight);
+    line-height: var(--hs-body-leading);
+  }
+
+  /* Zero radius is an invariant, not a per-component default. */
+  *,
+  *::before,
+  *::after {
+    border-radius: var(--hs-radius);
+  }
+
+  /**
+   * Browser surfaces.
+   *
+   * The parts we did not draw still carry the design. Left at their defaults
+   * these belong to no design system, and they are the cheapest tell that a page
+   * was assembled rather than built.
+   */
+  ::selection {
+    background: var(--hs-bone);
+    color: var(--hs-ink);
+  }
+
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    caret-color: var(--hs-flash);
+    scrollbar-color: var(--hs-smoke) var(--hs-ink);
+    scrollbar-width: thin;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--hs-ink);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--hs-smoke);
+    border: 2px solid var(--hs-ink);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--hs-ink-white);
+  }
+
+  /* No coloured focus ring — the Zero Chroma Rule. Flash outline instead. */
+  :focus-visible {
+    outline: 2px solid var(--hs-flash);
+    outline-offset: 2px;
+  }
+
+  a {
+    color: inherit;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+  }
+
+  /* Dates, prices, sizes and counts align in columns. */
+  .hs-nums {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  /**
+   * Type roles. Utility classes rather than Tailwind composites, so the roles
+   * stay legible in markup and a change lands in one place.
+   */
+  .hs-display {
+    font-size: var(--hs-display-size);
+    font-weight: var(--hs-display-weight);
+    line-height: var(--hs-display-leading);
+    letter-spacing: var(--hs-display-tracking);
+    font-stretch: 110%;
+    font-variation-settings: "wdth" var(--hs-display-width);
+    text-transform: lowercase;
+    text-wrap: balance;
+  }
+
+  .hs-headline {
+    font-size: var(--hs-headline-size);
+    font-weight: var(--hs-headline-weight);
+    line-height: var(--hs-headline-leading);
+    letter-spacing: var(--hs-headline-tracking);
+    font-stretch: 105%;
+    font-variation-settings: "wdth" var(--hs-headline-width);
+    text-transform: lowercase;
+    text-wrap: balance;
+  }
+
+  .hs-title {
+    font-size: var(--hs-title-size);
+    font-weight: var(--hs-title-weight);
+    line-height: var(--hs-title-leading);
+    letter-spacing: var(--hs-title-tracking);
+    text-transform: lowercase;
+  }
+
+  .hs-body {
+    font-size: var(--hs-body-size);
+    font-weight: var(--hs-body-weight);
+    line-height: var(--hs-body-leading);
+    max-width: var(--hs-body-measure);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /**
+   * Small prose: credits, disclaimers, fine print. Distinct from the label role
+   * because uppercase strips the ascenders and descenders readers use to
+   * recognise words — fine for "SAT 10 OCT 2026", wrong for a sentence.
+   */
+  .hs-meta {
+    font-size: 0.8125rem;
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: 0.01em;
+  }
+
+  .hs-label {
+    font-size: var(--hs-label-size);
+    font-weight: var(--hs-label-weight);
+    line-height: var(--hs-label-leading);
+    letter-spacing: var(--hs-label-tracking);
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  /**
+   * The dither.
+   *
+   * Sits over every surface, not only photographs — that is what makes the page
+   * one photocopied sheet rather than a dark theme. Static by decision: moving
+   * it turns a photocopy into a screensaver. Apply to a positioned element.
+   */
+  .hs-grain {
+    position: relative;
+  }
+
+  .hs-grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: var(--hs-dither);
+    background-repeat: repeat;
+    opacity: var(--hs-dither-opacity);
+    mix-blend-mode: screen;
+  }
+
+  .hs-grain-strong::after {
+    opacity: var(--hs-dither-opacity-strong);
+  }
+
+  /**
+   * Page-level grain: fixed, so density stays constant in device pixels rather
+   * than scaling with the layout. Sits above content and below the header (z-50)
+   * and the mobile menu, both of which carry their own grain.
+   */
+  .hs-grain-page::after {
+    position: fixed;
+    z-index: 40;
+  }
+
+  /**
+   * Edges dissolve into dots rather than fading. A linear-gradient fade is the
+   * wrong mechanic in this world; this masks the noise instead so the boundary
+   * scatters.
+   */
+  .hs-dissolve-b {
+    -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
+  }
+
+  .hs-dissolve-b::after {
+    opacity: var(--hs-dither-opacity-strong);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 40%, #000 100%);
+    mask-image: linear-gradient(to bottom, transparent 40%, #000 100%);
+  }
+
+  /**
+   * The one authored moment: the hero arriving as a photocopier pass. Stepped,
+   * not eased, and from an already-legible default so nothing is hidden if the
+   * animation never runs.
+   */
+  @keyframes hs-pass {
+    0% {
+      opacity: 0.25;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .hs-pass {
+    animation: hs-pass 260ms steps(3, end) both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hs-pass {
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 1ms !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }
