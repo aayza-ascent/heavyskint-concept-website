@@ -49,9 +49,14 @@ jobs:
       - name: Build
         run: pnpm build
 
-      # The design detector. Scans source for the anti-patterns that a
-      # typecheck cannot see -- unreadable contrast pairs, dead spacing rhythm,
-      # overflow. Exits 2 on findings, so a regression in the design system
-      # fails the build rather than shipping quietly.
+      # The design detector. Scans source for the anti-patterns a typecheck
+      # cannot see -- unreadable contrast pairs, dead spacing rhythm, overflow.
+      # Exits 2 on findings, so a regression in the design system fails the
+      # build rather than shipping quietly.
+      #
+      # Runs from npm rather than a launcher committed to this repo, since the
+      # vendored skill is deliberately gitignored. Pinned to major 4 so a
+      # breaking release cannot fail a build that passed yesterday. It reads
+      # DESIGN.md, which IS tracked -- the contract, not the tool.
       - name: Design detector
         run: pnpm detect

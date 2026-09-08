@@ -41,8 +41,18 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Impeccable: platform-specific binary, re-downloaded by `npx impeccable install`
-.claude/skills/impeccable/scripts/bin/
+# ── Design tooling, not project code ────────────────────────
+# The vendored Impeccable skill: ~2.1MB across 51 files, and half the tracked
+# size of this repo. It is a tool, reinstallable with `npx impeccable install`,
+# so it does not belong in a repo the band or another developer will hold.
+#
+# What it PRODUCES does stay tracked, because that is the actual value:
+# PRODUCT.md, DESIGN.md and .impeccable/design.json are the design contract.
+.claude/skills/
+.claude/agents/
+
+# Detector hook cache. Ephemeral, rewritten on every UI edit.
+.impeccable/hook.cache.json
 
 # ── Not code, and not for a public repo ─────────────────────
 # 205MB of Instagram exports. Evidence the design was measured from, not

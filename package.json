@@ -9,7 +9,7 @@
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
     "seed": "node sanity/seed.mts",
-    "detect": "./.claude/skills/impeccable/scripts/impeccable detect src"
+    "detect": "npx --yes impeccable@4 detect src"
   },
   "dependencies": {
     "@sanity/client": "^8.5.0",
