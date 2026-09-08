@@ -78,12 +78,35 @@ export async function SiteFooter() {
         </div>
 
         {/*
-          Photography is credited on principle: the archive is the work of
-          named photographers and the site leans on it entirely.
+          Small print. Sits as one line of poster furniture rather than a second
+          nav — these are pages a visitor looks for only when they need them,
+          and UK distance selling requires the shop to link them somewhere
+          reachable from every page.
         */}
-        <p className="hs-meta mt-void text-smoke">
-          Photography by Daniel Blake Visuals and others
-        </p>
+        <div className="mt-void flex flex-wrap items-baseline gap-x-block gap-y-tight">
+          <nav aria-label="Legal" className="flex flex-wrap gap-block">
+            <Link
+              href="/returns"
+              className="hs-meta text-smoke underline transition-colors duration-[120ms] ease-[steps(2,end)] hover:text-ink-white"
+            >
+              Returns
+            </Link>
+            <Link
+              href="/privacy"
+              className="hs-meta text-smoke underline transition-colors duration-[120ms] ease-[steps(2,end)] hover:text-ink-white"
+            >
+              Privacy
+            </Link>
+          </nav>
+
+          {/*
+            Photography is credited on principle: the archive is the work of
+            named photographers and the site leans on it entirely.
+          */}
+          <p className="hs-meta text-smoke">
+            Photography by Daniel Blake Visuals and others
+          </p>
+        </div>
       </div>
 
       {/* The sheet running out: the mark dissolving into the grain. */}
