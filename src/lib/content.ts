@@ -1,5 +1,7 @@
 import "server-only";
 
+import { cacheTag } from "next/cache";
+
 import {
   getUpcomingShows,
   getPastShows,
@@ -10,6 +12,8 @@ import {
 import { safe } from "@/lib/safe";
 import { env } from "@/lib/env";
 import { SHOWS, RELEASES, upcomingShows, pastShows } from "@/lib/fixtures";
+import type { FixtureShow } from "@/lib/fixtures";
+import { CACHE_TAGS } from "@/lib/cache-tags";
 import type { Show, Release, SiteSettings } from "@/lib/sanity/types";
 
 /**
@@ -27,8 +31,17 @@ import type { Show, Release, SiteSettings } from "@/lib/sanity/types";
 const useFixtures =
   process.env.NODE_ENV === "development" && !env.sanity.isConfigured;
 
-/** Logged once per read path so a fixture render is never mistaken for real data. */
+/**
+ * Warns that a render is fixture-backed, once per read path per server process.
+ *
+ * The point is to make sure a fixture render is never mistaken for real data,
+ * and one warning per path does that. Warning on every read instead put two
+ * lines in the terminal for every page load and buried the actual errors.
+ */
+const noticed = new Set<string>();
 function fixtureNotice(label: string) {
+  if (noticed.has(label)) return;
+  noticed.add(label);
   console.warn(
     `[content] ${label}: Sanity not configured — serving development fixtures ` +
       `from src/lib/fixtures.ts. Dates are reconstructed from posters and need ` +
@@ -36,10 +49,37 @@ function fixtureNotice(label: string) {
   );
 }
 
+/**
+ * The fixture shows, split into upcoming and past — cached.
+ *
+ * Splitting needs a "now", and reading the clock while prerendering is an
+ * unstable value under Cache Components: it can differ between renders, so
+ * Next refuses to bake it into static output. Caching the result is the
+ * sanctioned fix — every visitor sees the same split until the entry
+ * revalidates.
+ *
+ * That is also exactly what the real path does. In production the split runs
+ * in GROQ against Sanity's own `now()`, inside a `use cache` query tagged with
+ * the same key, so this keeps development and production behaving alike rather
+ * than papering over a difference.
+ *
+ * Only ever reached in development — see `useFixtures`.
+ */
+async function fixtureShowSplit(): Promise<{
+  upcoming: FixtureShow[];
+  past: FixtureShow[];
+}> {
+  "use cache";
+  cacheTag(CACHE_TAGS.shows);
+
+  const now = new Date();
+  return { upcoming: upcomingShows(now), past: pastShows(now) };
+}
+
 export async function readUpcomingShows(): Promise<Show[]> {
   if (useFixtures) {
     fixtureNotice("upcomingShows");
-    return upcomingShows();
+    return (await fixtureShowSplit()).upcoming;
   }
   return safe("upcomingShows", getUpcomingShows, []);
 }
@@ -47,7 +87,7 @@ export async function readUpcomingShows(): Promise<Show[]> {
 export async function readPastShows(): Promise<Show[]> {
   if (useFixtures) {
     fixtureNotice("pastShows");
-    return pastShows();
+    return (await fixtureShowSplit()).past;
   }
   return safe("pastShows", getPastShows, []);
 }
@@ -55,7 +95,7 @@ export async function readPastShows(): Promise<Show[]> {
 export async function readNextShow(): Promise<Show | null> {
   if (useFixtures) {
     fixtureNotice("nextShow");
-    return upcomingShows()[0] ?? null;
+    return (await fixtureShowSplit()).upcoming[0] ?? null;
   }
   return safe("nextShow", getNextShow, null);
 }

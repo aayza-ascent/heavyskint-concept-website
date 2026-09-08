@@ -197,15 +197,26 @@ export const PRESS = [
   },
 ] as const;
 
+/*
+ * `now` is a REQUIRED parameter on both splits, not a defaulted one.
+ *
+ * It used to default to `new Date()`, which made an impure clock read implicit
+ * at every call site — and under Cache Components reading the clock while
+ * prerendering is an unstable value that Next refuses to bake into static
+ * output. Requiring the argument moves that decision to the caller, where it
+ * can be made once and cached (see `content.ts`). These two functions are pure
+ * given `now`.
+ */
+
 /** Upcoming shows relative to `now`, soonest first. */
-export function upcomingShows(now = new Date()): FixtureShow[] {
+export function upcomingShows(now: Date): FixtureShow[] {
   return SHOWS.filter((s) => new Date(s.date) >= now && !s.cancelled).sort(
     (a, b) => a.date.localeCompare(b.date),
   );
 }
 
 /** Past shows relative to `now`, most recent first. */
-export function pastShows(now = new Date()): FixtureShow[] {
+export function pastShows(now: Date): FixtureShow[] {
   return SHOWS.filter((s) => new Date(s.date) < now).sort((a, b) =>
     b.date.localeCompare(a.date),
   );
