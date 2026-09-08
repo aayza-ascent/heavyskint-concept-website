@@ -25,7 +25,7 @@ export function Tag({
 }) {
   return (
     <span
-      className={`hs-label inline-flex items-center whitespace-nowrap px-tight py-hair text-[0.6875rem] ${tones[tone]} ${className ?? ""}`}
+      className={`hs-label inline-flex items-center whitespace-nowrap px-tight py-hair text-[length:var(--hs-tag-size)] ${tones[tone]} ${className ?? ""}`}
     >
       {children}
     </span>

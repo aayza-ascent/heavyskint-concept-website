@@ -44,6 +44,36 @@ typography:
     fontWeight: 700
     lineHeight: 1
     letterSpacing: "0.08em"
+  meta:
+    fontFamily: "Archivo, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+    fontSize: "0.8125rem"
+    fontWeight: 400
+    lineHeight: 1.4
+    letterSpacing: "0.01em"
+  quote:
+    fontFamily: "Archivo, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+    fontSize: "1.35rem"
+    fontWeight: 400
+    lineHeight: 1.35
+    letterSpacing: "normal"
+  tag:
+    fontFamily: "Archivo, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+    fontSize: "0.6875rem"
+    fontWeight: 700
+    lineHeight: 1
+    letterSpacing: "0.08em"
+  og-display:
+    fontFamily: "Archivo Display"
+    fontSize: "104px"
+    fontWeight: 900
+    lineHeight: 0.85
+    letterSpacing: "-0.04em"
+  og-label:
+    fontFamily: "Archivo Label"
+    fontSize: "24px"
+    fontWeight: 700
+    lineHeight: 1
+    letterSpacing: "0.08em"
 rounded:
   none: "0px"
 spacing:
@@ -226,6 +256,27 @@ hand-marker support-act credit, so the system has none either.
 - **Label** (700, `0.75rem`, tracking 0.08em, uppercase): Dates, ticket states, sizes, prices,
   photo credits, button text. This is the poster's metadata voice — `FREE ENTRY / 31ST JULY 2026`
   set in stacked lines with leading at 1.0.
+- **Meta** (400, `0.8125rem`, leading 1.4, tracking 0.01em): Small prose — photo credits,
+  disclaimers, the legal links in the footer, support-act lines. A separate role from Label rather
+  than a smaller Label, because uppercase strips the ascenders and descenders readers use to
+  recognise words: fine for `SAT 10 OCT 2026`, wrong for a sentence.
+
+- **Quote** (400, `1.35rem`, leading 1.35, measure 34ch): Press quotes. The body face stepped up
+  until it carries as a pull-quote, kept at prose leading because a quote is read rather than
+  scanned, and held to a tight measure so the larger size does not become a long line. The one
+  exception is the lead quote on the home page, which runs at Headline size over the photograph
+  that proves it.
+- **Tag** (700, `0.6875rem`, tracking 0.08em, uppercase): `SOLD OUT`, `CANCELLED`, sizes. One step
+  below Label on purpose — a tag is a chip stamped over dense rows and should read as an overprint,
+  not as a heading. Reserved for information that is also stated in text nearby, so the small size
+  never carries meaning on its own.
+
+**OG cards use pinned static instances of the same family.** `Archivo Display` (900, `wdth` 110)
+and `Archivo Label` (700, `wdth` 100) are not additional typefaces — they are Archivo, instanced
+and subset at build time for `assets/fonts/`. They exist because Satori, which renders the link
+previews, honours neither `font-variation-settings` nor `font-stretch`, so the axis positions the
+display and label roles ask for have to be baked into the file. Their metrics deliberately mirror
+the Display and Label roles above; if either role changes, rebuild the instances to match.
 
 ### Named Rules
 
@@ -385,6 +436,23 @@ Poster furniture, throughout. These are cut paper and stamped ink, not interface
 - **Mobile:** Full-screen ink overlay with display-role lowercase type as the menu items, set to
   fill the measure. Not a slide-in drawer with a list of small links — at this scale the menu is a
   page, and it is one of the best chances in the whole site to look like the poster.
+
+### OG Card
+
+1200x630, and treated as poster furniture rather than as a screenshot of the page — a link preview
+is usually seen at a fraction of its real size in a message thread, so it carries only the wordmark,
+one bone bar naming the section, and the claim in display type. Composition is `space-between`: the
+mark at the top gutter, everything else weighted to the bottom edge, and the black between them
+doing the pacing exactly as it does on the page.
+
+The hairline above the bone bar is drawn in smoke, not ash — per the Ash Is Not A Border rule, but
+doubly so here, because a 1px rule survives being scaled into a thumbnail only at smoke's 5.12:1.
+The bone bar is the card's single rationed gesture; there is no flash on an OG card at all.
+
+Titles are short, lowercase, and true. They must not name a specific release or date: these cards
+are generated at build time, and a card naming the latest single is wrong the day the next one
+lands. Individual merch products are the one exception, and they use the Shopify product photograph
+instead of a generated card.
 
 ### The Wordmark
 

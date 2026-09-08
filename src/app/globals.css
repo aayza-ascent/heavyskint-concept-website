@@ -170,11 +170,18 @@
    * because uppercase strips the ascenders and descenders readers use to
    * recognise words — fine for "SAT 10 OCT 2026", wrong for a sentence.
    */
+  .hs-quote {
+    font-size: var(--hs-quote-size);
+    font-weight: var(--hs-quote-weight);
+    line-height: var(--hs-quote-leading);
+    max-width: var(--hs-quote-measure);
+  }
+
   .hs-meta {
-    font-size: 0.8125rem;
-    font-weight: 400;
-    line-height: 1.4;
-    letter-spacing: 0.01em;
+    font-size: var(--hs-meta-size);
+    font-weight: var(--hs-meta-weight);
+    line-height: var(--hs-meta-leading);
+    letter-spacing: var(--hs-meta-tracking);
   }
 
   .hs-label {

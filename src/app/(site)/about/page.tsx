@@ -103,7 +103,7 @@ export default async function AboutPage() {
           {PRESS.map((item) => (
             <li key={item.source} className="border-t border-smoke py-step">
               <blockquote>
-                <p className="hs-body max-w-[34ch] text-[1.35rem] leading-[1.35] text-ink-white">
+                <p className="hs-body hs-quote text-ink-white">
                   &ldquo;{item.quote}&rdquo;
                 </p>
                 <footer className="hs-label mt-tight text-smoke">

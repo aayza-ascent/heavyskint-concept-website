@@ -86,6 +86,29 @@
   --hs-label-leading: 1;
   --hs-label-tracking: 0.08em;
 
+  /* Press quotes. The body face at a size that carries a pull-quote, with
+     prose leading rather than the compressed leading everything else uses —
+     a quote is read, not scanned. Measure is held tight (34ch) so the larger
+     size does not turn into a long line. */
+  --hs-quote-size: 1.35rem;
+  --hs-quote-weight: 400;
+  --hs-quote-leading: 1.35;
+  --hs-quote-measure: 34ch;
+
+  /* The poster stamp: SOLD OUT, CANCELLED, sizes. Deliberately one step below
+     label, because a tag is a chip stamped over dense rows and needs to read
+     as an overprint rather than as a heading. Reserved for information that is
+     also stated in text nearby, so the small size never carries it alone. */
+  --hs-tag-size: 0.6875rem;
+
+  /* Small prose: credits, disclaimers, fine print. A separate role from label
+     because uppercase strips the ascenders and descenders readers use to
+     recognise words — fine for "SAT 10 OCT 2026", wrong for a sentence. */
+  --hs-meta-size: 0.8125rem;
+  --hs-meta-weight: 400;
+  --hs-meta-leading: 1.4;
+  --hs-meta-tracking: 0.01em;
+
   /* ── Space ────────────────────────────────────────────────
      Bimodal on purpose. Related information packs tight; unrelated blocks are
      separated by a lot of nothing. There is deliberately no medium step —
