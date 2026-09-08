@@ -7,16 +7,20 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "seed": "node sanity/seed.mts"
   },
   "dependencies": {
+    "@sanity/client": "^8.5.0",
     "@sanity/image-url": "^2.1.1",
+    "@sanity/vision": "^6.12.0",
     "@sanity/webhook": "^4.0.4",
     "next": "16.3.4",
     "next-sanity": "^13.3.4",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "resend": "^6.26.0",
+    "sanity": "^6.12.0",
     "server-only": "^0.0.1"
   },
   "devDependencies": {

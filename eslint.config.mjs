@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Vendored third-party bundles shipped with the Impeccable skill. Linting
+    // them produced 94 warnings of noise, which buried real ones.
+    ".claude/skills/**",
   ]),
 ]);
 

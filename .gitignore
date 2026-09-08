@@ -43,3 +43,26 @@ next-env.d.ts
 
 # Impeccable: platform-specific binary, re-downloaded by `npx impeccable install`
 .claude/skills/impeccable/scripts/bin/
+
+# ── Not code, and not for a public repo ─────────────────────
+# 205MB of Instagram exports. Evidence the design was measured from, not
+# shippable source — and the photography belongs to the photographers
+# (@danielblakevisuals and others), so it must not be redistributed here.
+/heavyskint-insta-images/
+
+# Commercial engagement plan: running costs, margins, VAT position, payment
+# rates and account-ownership strategy. Fine on your machine, wrong in a repo
+# the band or another developer may end up holding.
+/heavyskint-website-plan.md
+
+# Impeccable live-mode session state (ephemeral). Note that
+# .impeccable/config.json, .impeccable/design.json and .impeccable/live/config.json
+# ARE project config and stay tracked — they're the design contract.
+/.impeccable/live/sessions/
+/.impeccable/live/annotations/
+/.impeccable/live/roots.json
+/.impeccable/live/server.json
+/.impeccable/live/inject-journal.json
+
+# Scratch space
+/.scratch/
