@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "seed": "node sanity/seed.mts",
     "detect": "./.claude/skills/impeccable/scripts/impeccable detect src"
   },
