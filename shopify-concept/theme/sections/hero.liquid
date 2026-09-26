@@ -23,9 +23,20 @@
 
   <div class="hero-bottom">
     <p class="hs-body t-white">{{ section.settings.blurb }}</p>
+{%- comment -%}
+  URLs are built with {% assign %} before the render call, never inline.
+
+  A filter expression inside {% render %} arguments — `href: routes.root_url |
+  append: 'pages/shows', label: '…'` — makes the pipe and the comma ambiguous to
+  the argument parser, and EVERY argument after it is silently dropped. The
+  result is a button with no label and the wrong href, which renders as a blank
+  white rectangle. Assign first.
+{%- endcomment -%}
+    {% assign shows_url = routes.root_url | append: 'pages/shows' %}
+    {% assign music_url = routes.root_url | append: 'pages/music' %}
     <div style="display:flex;flex-wrap:wrap;align-items:center;gap:var(--hs-space-block)">
-      {% render 'poster-button', href: routes.root_url | append: 'pages/shows', label: 'All shows' %}
-      {% render 'poster-button', href: routes.root_url | append: 'pages/music', label: 'Listen', variant: 'ghost' %}
+      {% render 'poster-button', href: shows_url, label: 'All shows' %}
+      {% render 'poster-button', href: music_url, label: 'Listen', variant: 'ghost' %}
     </div>
   </div>
 </section>

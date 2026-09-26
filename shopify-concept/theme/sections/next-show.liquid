@@ -38,7 +38,8 @@
           {% if show.ticket_url.value != blank and show.sold_out.value != true %}
             {% render 'poster-button', href: show.ticket_url.value, label: 'Tickets', external: true %}
           {% else %}
-            {% render 'poster-button', href: routes.root_url | append: 'pages/shows', label: 'All dates', variant: 'ghost' %}
+            {% assign all_dates_url = routes.root_url | append: 'pages/shows' %}
+            {% render 'poster-button', href: all_dates_url, label: 'All dates', variant: 'ghost' %}
           {% endif %}
         </div>
       </div>

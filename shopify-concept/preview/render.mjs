@@ -39,8 +39,10 @@ engine.registerFilter("image_url", (src) =>
   typeof src === "string" ? `/assets/${src}` : `/assets/${src?.src ?? ""}`,
 );
 
-const gbp = (pence) =>
-  `£${(Number(pence) / 100).toFixed(2).replace(/\.00$/, "")}`;
+// Shopify's money filter keeps the minor units (£25.00, not £25), and so does
+// formatMoney in the Next build. Matching both keeps the two versions
+// comparable down to the price column.
+const gbp = (pence) => `£${(Number(pence) / 100).toFixed(2)}`;
 
 engine.registerFilter("money", gbp);
 engine.registerFilter("money_with_currency", (p) => `${gbp(p)} GBP`);
