@@ -1,0 +1,14 @@
+{
+  "name": "heavyskint-shopify-concept",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "The fully-Shopify version of the heavyskint site: a real, uploadable theme plus a local preview harness.",
+  "scripts": {
+    "preview": "node preview/render.mjs && node preview/serve.mjs",
+    "build": "node preview/render.mjs"
+  },
+  "dependencies": {
+    "liquidjs": "^10.21.1"
+  }
+}

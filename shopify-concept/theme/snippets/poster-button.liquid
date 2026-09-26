@@ -1,0 +1,9 @@
+{%- comment -%}
+  Poster button.
+  Params: href, label, variant ('solid' default | 'ghost'), external (bool)
+{%- endcomment -%}
+<a
+  href="{{ href }}"
+  class="btn{% if variant == 'ghost' %} btn-ghost{% endif %}"
+  {% if external %}target="_blank" rel="noopener noreferrer"{% endif %}
+>{{ label }}</a>

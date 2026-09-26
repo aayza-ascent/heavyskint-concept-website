@@ -1,0 +1,48 @@
+<footer class="site-footer">
+  <div>
+    <p class="hs-label t-smoke">heavyskint.</p>
+    {% if section.settings.booking_email != blank %}
+      <p class="hs-meta t-smoke" style="margin-top:var(--hs-space-tight)">
+        Booking &amp; press:
+        <a href="mailto:{{ section.settings.booking_email }}">{{ section.settings.booking_email }}</a>
+      </p>
+    {% endif %}
+  </div>
+
+  <div class="footer-links hs-label">
+    <a href="{{ routes.root_url }}pages/shows">Shows</a>
+    <a href="{{ routes.root_url }}pages/music">Music</a>
+    <a href="{{ routes.all_products_collection_url }}">Merch</a>
+    <a href="{{ routes.root_url }}pages/contact">Contact</a>
+  </div>
+
+  <div class="footer-links hs-label">
+    <a href="{{ routes.root_url }}policies/refund-policy">Returns</a>
+    <a href="{{ routes.root_url }}policies/privacy-policy">Privacy</a>
+  </div>
+
+  {%- comment -%}
+    Social links come from the theme settings so the band edits them in one
+    place. Nothing renders until they are filled in: a wrong Spotify link is
+    worse than no Spotify link.
+  {%- endcomment -%}
+  {% if section.settings.spotify_url != blank or section.settings.bandcamp_url != blank or section.settings.instagram_url != blank %}
+    <div class="footer-links hs-label">
+      {% if section.settings.spotify_url != blank %}<a href="{{ section.settings.spotify_url }}" target="_blank" rel="noopener noreferrer">Spotify</a>{% endif %}
+      {% if section.settings.bandcamp_url != blank %}<a href="{{ section.settings.bandcamp_url }}" target="_blank" rel="noopener noreferrer">Bandcamp</a>{% endif %}
+      {% if section.settings.instagram_url != blank %}<a href="{{ section.settings.instagram_url }}" target="_blank" rel="noopener noreferrer">Instagram</a>{% endif %}
+    </div>
+  {% endif %}
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    { "type": "text", "id": "booking_email", "label": "Booking email" },
+    { "type": "url", "id": "spotify_url", "label": "Spotify" },
+    { "type": "url", "id": "bandcamp_url", "label": "Bandcamp" },
+    { "type": "url", "id": "instagram_url", "label": "Instagram" }
+  ]
+}
+{% endschema %}

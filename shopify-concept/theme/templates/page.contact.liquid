@@ -1,0 +1,40 @@
+{%- comment -%}
+  Booking and press.
+
+  `{% form 'contact' %}` is Shopify's own endpoint: it delivers to the store's
+  contact email and carries its own spam handling. The Next.js build needs
+  src/app/api/contact/route.ts plus Resend, an API key, a verified sending
+  domain and hand-rolled rate limiting to do the same thing.
+{%- endcomment -%}
+<div class="gutter pad-void">
+  <h1 class="hs-display t-white">contact</h1>
+</div>
+
+<section class="rule-t gutter pad-void">
+  <p class="hs-body t-white">Booking and press enquiries.</p>
+
+  {% form 'contact' %}
+    {% if form.posted_successfully? %}
+      <p class="hs-title t-white" style="margin-top:var(--hs-space-step)">Thanks — we&rsquo;ll be in touch.</p>
+    {% else %}
+      <div style="margin-top:var(--hs-space-step);max-width:42rem">
+        <div class="field">
+          <label for="contact-name">Name</label>
+          <input id="contact-name" type="text" name="contact[name]" required>
+        </div>
+
+        <div class="field">
+          <label for="contact-email">Email</label>
+          <input id="contact-email" type="email" name="contact[email]" required>
+        </div>
+
+        <div class="field">
+          <label for="contact-body">Message</label>
+          <textarea id="contact-body" name="contact[body]" rows="6" required></textarea>
+        </div>
+
+        <button type="submit" class="btn">Send</button>
+      </div>
+    {% endif %}
+  {% endform %}
+</section>

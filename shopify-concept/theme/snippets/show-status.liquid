@@ -1,0 +1,11 @@
+{%- comment -%}
+  Sold out / cancelled stamp. Params: sold_out, cancelled (booleans)
+
+  Reserved for information also stated in text nearby, so the small tag size
+  never carries the meaning alone.
+{%- endcomment -%}
+{% if cancelled %}
+  <span class="tag tag-ghost">Cancelled</span>
+{% elsif sold_out %}
+  <span class="tag">Sold out</span>
+{% endif %}

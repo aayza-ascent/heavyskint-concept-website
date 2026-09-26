@@ -1,0 +1,37 @@
+{%- comment -%}
+  Merch grid.
+
+  `collection.products` is a native Liquid object. No API client, no cache tags,
+  no webhook, no revalidation — stock changed in admin is live on the next
+  request. Compare src/lib/shopify/queries.ts in the Next.js build.
+{%- endcomment -%}
+<div class="gutter pad-void">
+  <h1 class="hs-display t-white">{{ collection.title | downcase }}</h1>
+</div>
+
+<section class="rule-t gutter pad-void">
+  {% if collection.products.size > 0 %}
+    <ul class="grid-merch" style="margin-top:0">
+      {% for product in collection.products %}
+        <li>
+          <a href="{{ product.url }}" style="text-decoration:none;display:block">
+            <div class="merch-frame hs-grain">
+              {% if product.featured_image %}
+                <img src="{{ product.featured_image | image_url: width: 800 }}"
+                     alt="{{ product.featured_image.alt | default: product.title | escape }}" width="800" height="1000" loading="lazy">
+              {% endif %}
+              {% unless product.available %}<div class="merch-sold"><span class="tag">Sold out</span></div>{% endunless %}
+            </div>
+            <h2 class="hs-title t-white" style="margin-top:var(--hs-space-block)">{{ product.title }}</h2>
+            <p class="hs-label t-smoke" style="margin-top:var(--hs-space-hair)">{{ product.price | money }}</p>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="hs-title t-white">the store isn&rsquo;t open yet</p>
+    <p class="hs-body t-smoke" style="margin-top:var(--hs-space-tight)">
+      Until it is, merch is on the table at every show.
+    </p>
+  {% endif %}
+</section>

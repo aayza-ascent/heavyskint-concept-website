@@ -1,0 +1,16 @@
+{
+  "current": {
+    "sections": {
+      "header": { "type": "header", "settings": { "menu": "main-menu" } },
+      "footer": {
+        "type": "footer",
+        "settings": {
+          "booking_email": "",
+          "spotify_url": "",
+          "bandcamp_url": "",
+          "instagram_url": ""
+        }
+      }
+    }
+  }
+}

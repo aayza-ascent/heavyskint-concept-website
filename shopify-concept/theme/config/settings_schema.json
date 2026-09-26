@@ -1,0 +1,19 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "heavyskint — The Photocopied Dark",
+    "theme_version": "0.1.0",
+    "theme_author": "heavyskint",
+    "theme_documentation_url": "https://github.com/aayza-ascent/heavyskint-concept-website",
+    "theme_support_url": "https://github.com/aayza-ascent/heavyskint-concept-website"
+  },
+  {
+    "name": "Colours",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "The palette is fixed by the design system — every colour was measured from the band's own published work, and mean saturation across all band imagery is 0.000. Colours are deliberately not editable here: a coloured token would be a defect, not a feature. See DESIGN.md."
+      }
+    ]
+  }
+]

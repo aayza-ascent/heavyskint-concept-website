@@ -1,0 +1,29 @@
+<header class="site-header">
+  <a href="{{ routes.root_url }}" style="flex-shrink:0;text-decoration:none">
+    {% render 'wordmark' %}
+  </a>
+
+  {%- comment -%}
+    Driven by the Navigation menu in Shopify admin, so the band can reorder or
+    rename items themselves without a developer or a deploy.
+  {%- endcomment -%}
+  <nav class="site-nav hs-label" aria-label="Primary">
+    {% for link in linklists[section.settings.menu].links %}
+      <a href="{{ link.url }}"{% if link.active %} aria-current="page"{% endif %}>{{ link.title }}</a>
+    {% endfor %}
+  </nav>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    }
+  ]
+}
+{% endschema %}

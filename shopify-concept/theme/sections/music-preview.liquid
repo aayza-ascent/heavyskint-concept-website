@@ -1,0 +1,53 @@
+{%- comment -%}
+  Music, lead-weighted: the latest release gets the large frame, the back
+  catalogue sits beside it. Ordering relies on admin entry order — see
+  the note in next-show.liquid.
+{%- endcomment -%}
+<section class="rule-t gutter pad-void" aria-labelledby="music">
+  <div class="split">
+    <h2 id="music" class="hs-headline t-white">music</h2>
+    <a href="{{ routes.root_url }}pages/music" class="hs-label t-white">Every release</a>
+  </div>
+
+  {% assign releases = shop.metaobjects.release.values %}
+  {% if releases.size > 0 %}
+    <div class="two-col">
+      {% assign latest = releases[0] %}
+      <article>
+        {% if latest.cover.value %}
+          <div class="release-cover hs-grain">
+            <img src="{{ latest.cover.value | image_url: width: 900 }}" alt="{{ latest.cover_alt.value | escape }}" width="900" height="900">
+          </div>
+        {% endif %}
+        <h3 class="hs-title t-white" style="margin-top:var(--hs-space-block)">{{ latest.title.value }}</h3>
+        <p class="hs-label t-smoke" style="margin-top:var(--hs-space-tight)">
+          <time datetime="{{ latest.release_date.value | date: '%Y-%m-%d' }}">{{ latest.release_date.value | date: '%d %B %Y' | upcase }}</time>
+        </p>
+      </article>
+
+      <ul class="release-list">
+        {% for release in releases offset: 1 %}
+          <li class="release-row">
+            {% if release.cover.value %}
+              <div class="release-thumb hs-grain">
+                <img src="{{ release.cover.value | image_url: width: 144 }}" alt="{{ release.cover_alt.value | escape }}" width="72" height="72">
+              </div>
+            {% endif %}
+            <div>
+              <h3 class="hs-title t-white">{{ release.title.value }}</h3>
+              <p class="hs-label t-smoke" style="margin-top:var(--hs-space-hair)">
+                <time datetime="{{ release.release_date.value | date: '%Y-%m-%d' }}">{{ release.release_date.value | date: '%d %B %Y' | upcase }}</time>
+              </p>
+            </div>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% else %}
+    <p class="hs-body t-smoke" style="margin-top:var(--hs-space-step)">Releases will appear here as they come out.</p>
+  {% endif %}
+</section>
+
+{% schema %}
+{ "name": "Music preview", "settings": [], "presets": [{ "name": "Music preview" }] }
+{% endschema %}

@@ -4,8 +4,21 @@
     {
       "name": "heavyskint",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["dev"],
+      "runtimeArgs": [
+        "dev"
+      ],
       "port": 3000
+    },
+    {
+      "name": "shopify-concept",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": [
+        "--dir",
+        "shopify-concept",
+        "run",
+        "preview"
+      ],
+      "port": 4321
     }
   ]
 }

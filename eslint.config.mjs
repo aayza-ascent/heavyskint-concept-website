@@ -15,6 +15,10 @@ const eslintConfig = defineConfig([
     // Vendored third-party bundles shipped with the Impeccable skill. Linting
     // them produced 94 warnings of noise, which buried real ones.
     ".claude/skills/**",
+    // The Shopify concept is a standalone Liquid theme plus a small render
+    // harness. It has its own package and is not part of the Next.js app, so
+    // the Next/TypeScript rule set does not apply to it.
+    "shopify-concept/**",
   ]),
 ]);
 

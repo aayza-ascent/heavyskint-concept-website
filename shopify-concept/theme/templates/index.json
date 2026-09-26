@@ -1,0 +1,29 @@
+{
+  "sections": {
+    "hero": { "type": "hero" },
+    "next-show": { "type": "next-show" },
+    "the-record": {
+      "type": "the-record",
+      "blocks": {
+        "q1": {
+          "type": "quote",
+          "settings": {
+            "quote": "They are going to be all over the UK, if not, the world",
+            "source": "It's All Indie"
+          }
+        },
+        "q2": {
+          "type": "quote",
+          "settings": {
+            "quote": "Equal parts vintage rock and youthful recklessness",
+            "source": "The Indie Scene"
+          }
+        }
+      },
+      "block_order": ["q1", "q2"]
+    },
+    "music-preview": { "type": "music-preview" },
+    "merch-preview": { "type": "merch-preview" }
+  },
+  "order": ["hero", "next-show", "the-record", "music-preview", "merch-preview"]
+}

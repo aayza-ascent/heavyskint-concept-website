@@ -1,0 +1,57 @@
+{%- comment -%}
+  Shows.
+
+  Upcoming and past, split against the request time. The band never archives a
+  gig — a past date moves itself.
+
+  Never delete a sold-out show after it happens: a promoter reading this page is
+  reading a year of sold-out rooms, and each deletion weakens that case.
+{%- endcomment -%}
+{% assign now_ts = 'now' | date: '%s' | plus: 0 %}
+{% assign upcoming_count = 0 %}
+{% assign past_count = 0 %}
+
+<div class="gutter pad-void">
+  <h1 class="hs-display t-white">shows</h1>
+</div>
+
+<section class="gutter" style="padding-bottom:var(--hs-space-void)" aria-labelledby="upcoming">
+  <h2 id="upcoming" class="hs-label t-smoke" style="margin-bottom:var(--hs-space-block)">Upcoming</h2>
+  <ul class="show-list">
+    {% for show in shop.metaobjects.show.values %}
+      {% assign ts = show.date.value | date: '%s' | plus: 0 %}
+      {% if ts >= now_ts %}
+        {% assign upcoming_count = upcoming_count | plus: 1 %}
+        {% render 'show-row', show: show, past: false %}
+      {% endif %}
+    {% endfor %}
+  </ul>
+
+  {% if upcoming_count == 0 %}
+    <div style="border-top:1px solid var(--hs-smoke);padding:var(--hs-space-step) 0">
+      <p class="hs-title t-white">nothing announced right now</p>
+      <p class="hs-body t-smoke" style="margin-top:var(--hs-space-tight)">
+        New dates go up here first. Follow along for the announcement.
+      </p>
+    </div>
+  {% endif %}
+</section>
+
+{% for show in shop.metaobjects.show.values %}
+  {% assign ts = show.date.value | date: '%s' | plus: 0 %}
+  {% if ts < now_ts %}{% assign past_count = past_count | plus: 1 %}{% endif %}
+{% endfor %}
+
+{% if past_count > 0 %}
+  <section class="gutter" style="padding-bottom:var(--hs-space-void)" aria-labelledby="past">
+    <h2 id="past" class="hs-label t-smoke" style="margin-bottom:var(--hs-space-block)">Past</h2>
+    <ul class="show-list">
+      {% for show in shop.metaobjects.show.values reversed %}
+        {% assign ts = show.date.value | date: '%s' | plus: 0 %}
+        {% if ts < now_ts %}
+          {% render 'show-row', show: show, past: true %}
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </section>
+{% endif %}

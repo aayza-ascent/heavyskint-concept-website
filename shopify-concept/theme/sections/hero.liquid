@@ -1,0 +1,49 @@
+{%- comment -%}
+  Hero.
+
+  Mode: Persuade. Leads with the strongest true thing the band owns — the
+  sold-out record — rather than a welcome. The image is near-black by nature
+  (71% of its pixels below L=24), which is why display type sits straight on it.
+{%- endcomment -%}
+<section class="hero hs-grain">
+  {% if section.settings.image %}
+    <img class="hero-img" src="{{ section.settings.image | image_url: width: 2000 }}"
+         alt="{{ section.settings.image.alt | escape }}" width="2000" height="2500">
+  {% else %}
+    <img class="hero-img" src="{{ 'press-live-mic.webp' | asset_url }}"
+         alt="heavyskint live, vocalist at the mic under a single hard light" width="1400" height="1750">
+  {% endif %}
+
+  {%- comment -%} Tonal layering, not a gradient scrim — the system's own depth mechanism. {%- endcomment -%}
+  <div class="hero-veil" aria-hidden="true"></div>
+
+  <div class="hero-top">
+    <h1 class="hs-display hs-pass t-white">{{ section.settings.heading }}</h1>
+  </div>
+
+  <div class="hero-bottom">
+    <p class="hs-body t-white">{{ section.settings.blurb }}</p>
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:var(--hs-space-block)">
+      {% render 'poster-button', href: routes.root_url | append: 'pages/shows', label: 'All shows' %}
+      {% render 'poster-button', href: routes.root_url | append: 'pages/music', label: 'Listen', variant: 'ghost' %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Background photograph" },
+    {
+      "type": "text", "id": "heading", "label": "Headline",
+      "default": "sold out every show in scotland."
+    },
+    {
+      "type": "textarea", "id": "blurb", "label": "Introduction",
+      "default": "A five-piece from Glasgow: 90s shoegaze, grunge and alt-rock with a soulful tinge and an unfiltered intensity."
+    }
+  ],
+  "presets": [{ "name": "Hero" }]
+}
+{% endschema %}

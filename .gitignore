@@ -76,3 +76,13 @@ next-env.d.ts
 
 # Scratch space
 /.scratch/
+
+# Shopify concept: rendered preview output and its isolated dependency tree.
+# The theme itself and the preview source ARE tracked — only build output isn't.
+/shopify-concept/out/
+/shopify-concept/node_modules/
+
+# Raw merch photography drop. The processed copy the theme actually serves lives
+# at shopify-concept/theme/assets/ and IS tracked — same policy as the Instagram
+# dump above: working files out, shippable assets in.
+/heavyskint-merch-images/

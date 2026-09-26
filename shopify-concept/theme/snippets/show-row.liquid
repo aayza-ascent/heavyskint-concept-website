@@ -1,0 +1,46 @@
+{%- comment -%}
+  A show, as a listing block rather than a card. Params: show (metaobject), past (bool)
+
+  Transparent on the ink ground with a single smoke hairline above, so a stack
+  reads as a poster's listing rather than a set of floating panels.
+{%- endcomment -%}
+{% assign sold_out = show.sold_out.value | default: false %}
+{% assign cancelled = show.cancelled.value | default: false %}
+{% assign unavailable = false %}
+{% if sold_out or cancelled %}{% assign unavailable = true %}{% endif %}
+
+<li class="show-row hs-grain{% if past %} is-past{% endif %}">
+  <time class="hs-label t-smoke" datetime="{{ show.date.value | date: '%Y-%m-%d' }}">
+    {{ show.date.value | date: '%a %d %b %Y' | upcase }}
+  </time>
+
+  <div>
+    <h3 class="hs-title {% if past %}t-smoke{% else %}t-white{% endif %}">{{ show.venue.value }}</h3>
+    <p class="hs-label t-smoke" style="margin-top:var(--hs-space-hair)">
+      {{ show.city.value }}{% if show.country.value and show.city.value != show.country.value %}, {{ show.country.value }}{% endif %}
+    </p>
+
+    {%- comment -%} The "+" prefix is the posters' own convention for a support bill. {%- endcomment -%}
+    {% if show.support_acts.value != blank %}
+      <p class="hs-meta t-smoke" style="margin-top:var(--hs-space-tight)">
+        {% for act in show.support_acts.value %}+ {{ act }}{% unless forloop.last %} &nbsp; {% endunless %}{% endfor %}
+      </p>
+    {% endif %}
+
+    {% if show.presented_by.value != blank %}
+      <p class="hs-meta t-smoke" style="margin-top:var(--hs-space-hair)">{{ show.presented_by.value }}</p>
+    {% endif %}
+  </div>
+
+  <div class="show-actions">
+    {% render 'show-status', sold_out: sold_out, cancelled: cancelled %}
+
+    {% if past == false and unavailable == false %}
+      {% if show.ticket_url.value != blank %}
+        {% render 'poster-button', href: show.ticket_url.value, label: 'Tickets', external: true %}
+      {% else %}
+        <span class="hs-label t-smoke">On sale soon</span>
+      {% endif %}
+    {% endif %}
+  </div>
+</li>

@@ -1,0 +1,54 @@
+{%- comment -%}
+  Product.
+
+  The whole cart is `{% form 'product' %}`. Shopify handles the cart, the
+  checkout, tax, shipping and inventory re-check on submit.
+
+  The headless build needs src/lib/shopify/cart.ts (cartCreate / cartLinesAdd /
+  cartLinesUpdate / cartLinesRemove), an httpOnly cookie, a server action and a
+  redirect to checkoutUrl to do the same job. That module is also still marked
+  UNVERIFIED because it has never run against a real store. This has no such
+  risk — it is Shopify's own form.
+{%- endcomment -%}
+<div class="gutter pad-void">
+  <div class="product">
+    <div>
+      {% if product.featured_image %}
+        <div class="hs-grain" style="position:relative;overflow:hidden;background:var(--hs-ink-raised)">
+          <img src="{{ product.featured_image | image_url: width: 1200 }}"
+               alt="{{ product.featured_image.alt | default: product.title | escape }}" width="1200" height="1500">
+        </div>
+      {% endif %}
+    </div>
+
+    <div>
+      <h1 class="hs-headline t-white">{{ product.title | downcase }}</h1>
+      <p class="hs-label t-smoke" style="margin-top:var(--hs-space-block)">{{ product.price | money }}</p>
+
+      <div class="hs-body t-white" style="margin-top:var(--hs-space-step)">{{ product.description }}</div>
+
+      {% form 'product', product %}
+        <div class="field" style="margin-top:var(--hs-space-step)">
+          <label for="variant-select">Size</label>
+          <select id="variant-select" name="id" class="variant" style="width:auto">
+            {% for variant in product.variants %}
+              <option value="{{ variant.id }}" {% unless variant.available %}disabled{% endunless %}>
+                {{ variant.title }}{% unless variant.available %} — sold out{% endunless %} · {{ variant.price | money }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <button type="submit" class="btn" {% unless product.available %}disabled{% endunless %} style="margin-top:var(--hs-space-block)">
+          {% if product.available %}Add to cart{% else %}Sold out{% endif %}
+        </button>
+      {% endform %}
+
+      {% unless product.available %}
+        <p class="hs-meta t-smoke" style="margin-top:var(--hs-space-block)">
+          Sold out online. There may still be some on the merch table at the next show.
+        </p>
+      {% endunless %}
+    </div>
+  </div>
+</div>

@@ -1,0 +1,58 @@
+{%- comment -%}
+  Next show.
+
+  The one thing a convinced visitor can act on right now, so it gets its own
+  surface rather than a row in a list.
+
+  NOTE ON ORDERING: Liquid cannot sort metaobject entries by a field value, so
+  this relies on the entries being ordered by date in the Shopify admin. The
+  Next.js build sorts in GROQ against now(). This is a genuine limitation of the
+  theme route, documented in docs/COMPARISON.md.
+{%- endcomment -%}
+{% assign now_ts = 'now' | date: '%s' | plus: 0 %}
+{% assign found = false %}
+
+<section class="rule-t gutter pad-void" aria-labelledby="next-show">
+  <h2 id="next-show" class="hs-label t-smoke">Next show</h2>
+
+  {% for show in shop.metaobjects.show.values %}
+    {% assign ts = show.date.value | date: '%s' | plus: 0 %}
+    {% if ts >= now_ts and show.cancelled.value != true and found == false %}
+      {% assign found = true %}
+      <div style="margin-top:var(--hs-space-step);display:flex;flex-direction:column;gap:var(--hs-space-step)">
+        <div>
+          <p class="hs-headline t-white">{{ show.venue.value }}</p>
+          <p class="hs-label t-smoke" style="margin-top:var(--hs-space-tight)">
+            <time datetime="{{ show.date.value | date: '%Y-%m-%d' }}">{{ show.date.value | date: '%a %d %b %Y' | upcase }}</time>
+            &nbsp; {{ show.city.value }}
+          </p>
+          {% if show.support_acts.value != blank %}
+            <p class="hs-label t-smoke" style="margin-top:var(--hs-space-tight)">
+              {% for act in show.support_acts.value %}+ {{ act }}{% unless forloop.last %} &nbsp; {% endunless %}{% endfor %}
+            </p>
+          {% endif %}
+        </div>
+
+        <div style="display:flex;align-items:center;gap:var(--hs-space-block)">
+          {% render 'show-status', sold_out: show.sold_out.value, cancelled: show.cancelled.value %}
+          {% if show.ticket_url.value != blank and show.sold_out.value != true %}
+            {% render 'poster-button', href: show.ticket_url.value, label: 'Tickets', external: true %}
+          {% else %}
+            {% render 'poster-button', href: routes.root_url | append: 'pages/shows', label: 'All dates', variant: 'ghost' %}
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+
+  {% if found == false %}
+    <div style="margin-top:var(--hs-space-step)">
+      <p class="hs-headline t-white">nothing announced right now</p>
+      <p class="hs-body t-smoke" style="margin-top:var(--hs-space-block)">New dates go up here first.</p>
+    </div>
+  {% endif %}
+</section>
+
+{% schema %}
+{ "name": "Next show", "settings": [], "presets": [{ "name": "Next show" }] }
+{% endschema %}

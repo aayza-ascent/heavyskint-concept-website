@@ -1,0 +1,13 @@
+{%- comment -%}
+  The wordmark.
+
+  Rendered as a CSS mask rather than an inline <svg> or an <img>. A mask keeps
+  `currentColor` working — so the mark inherits hover and focus colour like the
+  Next.js build does — without pasting 10KB of traced path data into every page.
+{%- endcomment -%}
+<span
+  class="wordmark"
+  role="img"
+  aria-label="heavyskint. — home"
+  style="display:inline-block;background-color:currentColor;-webkit-mask:url({{ 'wordmark.svg' | asset_url }}) no-repeat center/contain;mask:url({{ 'wordmark.svg' | asset_url }}) no-repeat center/contain;aspect-ratio:1317/258;"
+></span>

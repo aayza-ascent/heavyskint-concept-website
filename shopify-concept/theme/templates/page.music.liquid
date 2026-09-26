@@ -1,0 +1,40 @@
+<div class="gutter pad-void">
+  <h1 class="hs-display t-white">music</h1>
+</div>
+
+<section class="gutter" style="padding-bottom:var(--hs-space-void)">
+  {% assign releases = shop.metaobjects.release.values %}
+  {% if releases.size > 0 %}
+    <ul class="release-list">
+      {% for release in releases %}
+        <li class="release-row" style="align-items:flex-start">
+          {% if release.cover.value %}
+            <div class="release-thumb hs-grain" style="width:140px;height:140px">
+              <img src="{{ release.cover.value | image_url: width: 280 }}" alt="{{ release.cover_alt.value | escape }}" width="140" height="140" loading="lazy">
+            </div>
+          {% endif %}
+          <div>
+            <h2 class="hs-title t-white">{{ release.title.value }}</h2>
+            <p class="hs-label t-smoke" style="margin-top:var(--hs-space-hair)">
+              {{ release.type.value }} &nbsp;
+              <time datetime="{{ release.release_date.value | date: '%Y-%m-%d' }}">{{ release.release_date.value | date: '%d %B %Y' | upcase }}</time>
+            </p>
+
+            {%- comment -%} Nothing renders until the band supplies real links. {%- endcomment -%}
+            {% if release.links.value != blank %}
+              <ul style="display:flex;flex-wrap:wrap;gap:var(--hs-space-block);margin:var(--hs-space-block) 0 0;padding:0;list-style:none">
+                {% for link in release.links.value %}
+                  <li><a class="hs-label t-white" href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link.platform }}</a></li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p class="hs-meta t-smoke" style="margin-top:var(--hs-space-block)">Streaming links coming soon.</p>
+            {% endif %}
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="hs-body t-smoke">Releases will appear here as they come out.</p>
+  {% endif %}
+</section>

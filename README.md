@@ -58,6 +58,7 @@ token and Resend key are server-side and must stay that way.
 | `src/styles/tokens.css` | The tokens themselves. A brand change is a one-file change |
 | `docs/BAND-GUIDE.md` | For the band: adding shows, releases, merch, running POS at a gig |
 | `docs/PROJECT-STATUS.md` | What's built, what's blocked, how Shopify and Sanity are handled, UK/Scotland legal |
+| `shopify-concept/` | The alternative Shopify-only build, for the band to compare against this one |
 | `sanity/schemas/` | Content model, written for one non-technical editor |
 | `assets/fonts/` | Build-time fonts for OG cards only — not served to browsers |
 

@@ -1,0 +1,57 @@
+{%- comment -%}
+  Merch.
+
+  Stock is held by the band and sold at shows through the same inventory, so an
+  out-of-stock state here is normal and gets said plainly rather than hidden.
+
+  This is the part the theme route does BETTER than headless: `product` is a
+  native Liquid object, so there is no Storefront API client, no cache tags and
+  no webhook — a stock change in admin is live on the next request.
+{%- endcomment -%}
+{% assign collection = collections[section.settings.collection] %}
+
+<section class="rule-t gutter pad-void" aria-labelledby="merch">
+  <div class="split">
+    <h2 id="merch" class="hs-headline t-white">merch</h2>
+    {% if collection.products.size > 0 %}
+      <a href="{{ collection.url }}" class="hs-label t-white">Everything</a>
+    {% endif %}
+  </div>
+
+  {% if collection.products.size > 0 %}
+    <ul class="grid-merch">
+      {% for product in collection.products limit: 3 %}
+        <li>
+          <a href="{{ product.url }}" style="text-decoration:none;display:block">
+            <div class="merch-frame hs-grain">
+              {% if product.featured_image %}
+                <img src="{{ product.featured_image | image_url: width: 800 }}"
+                     alt="{{ product.featured_image.alt | default: product.title | escape }}" width="800" height="1000" loading="lazy">
+              {% endif %}
+              {% unless product.available %}<div class="merch-sold"><span class="tag">Sold out</span></div>{% endunless %}
+            </div>
+            <h3 class="hs-title t-white" style="margin-top:var(--hs-space-block)">{{ product.title }}</h3>
+            <p class="hs-label t-smoke" style="margin-top:var(--hs-space-hair)">
+              {% if product.available %}{{ product.price | money }}{% else %}Sold out{% endif %}
+            </p>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div style="margin-top:var(--hs-space-step)">
+      <p class="hs-title t-white">the store isn&rsquo;t open yet</p>
+      <p class="hs-body t-smoke" style="margin-top:var(--hs-space-tight)">Until it is, merch is on the table at every show.</p>
+    </div>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "Merch preview",
+  "settings": [
+    { "type": "collection", "id": "collection", "label": "Collection", "default": "merch" }
+  ],
+  "presets": [{ "name": "Merch preview" }]
+}
+{% endschema %}

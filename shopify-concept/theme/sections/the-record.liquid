@@ -1,0 +1,68 @@
+{%- comment -%}
+  The live record.
+
+  Proof, not adjectives. The press quote runs at headline size over the crowd
+  photograph that demonstrates it, so the claim and its evidence are one object.
+
+  ⚠ The awards line below is an editable setting on purpose. The source caption
+  says "nominated"; confirm the actual outcome with the band before publishing.
+{%- endcomment -%}
+{% assign sold_out_count = 0 %}
+{% for show in shop.metaobjects.show.values %}
+  {% if show.sold_out.value == true %}{% assign sold_out_count = sold_out_count | plus: 1 %}{% endif %}
+{% endfor %}
+
+<section class="hs-grain" style="position:relative;isolation:isolate;overflow:hidden" aria-labelledby="the-record">
+  <img src="{{ 'press-live-crowd.webp' | asset_url }}" alt="heavyskint crowd, arms raised in a packed room"
+       style="position:absolute;inset:0;z-index:-10;width:100%;height:100%;object-fit:cover" width="1400" height="1750">
+  <div style="position:absolute;inset:0;z-index:-10;background:rgb(15 15 16 / 0.7)" aria-hidden="true"></div>
+
+  <div class="gutter pad-chasm">
+    <h2 id="the-record" class="hs-label t-smoke">The live record</h2>
+
+    <blockquote style="margin:var(--hs-space-step) 0 0">
+      <p class="hs-headline t-flash">&ldquo;{{ section.settings.lead_quote }}&rdquo;</p>
+      <footer class="hs-label t-white" style="margin-top:var(--hs-space-block)">{{ section.settings.lead_source }}</footer>
+    </blockquote>
+
+    <p class="hs-body t-white" style="margin-top:var(--hs-space-gap)">
+      {% if sold_out_count > 0 %}{{ sold_out_count }} sold-out shows and counting. {% endif %}
+      {{ section.settings.awards_line }}
+    </p>
+
+    <ul style="margin-top:var(--hs-space-gap);padding:0;list-style:none;display:flex;flex-direction:column;gap:var(--hs-space-step)">
+      {% for block in section.blocks %}
+        <li class="hs-body t-white" {{ block.shopify_attributes }}>
+          &ldquo;{{ block.settings.quote }}&rdquo;
+          <span class="hs-label t-smoke" style="margin-left:var(--hs-space-tight)">{{ block.settings.source }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "The live record",
+  "settings": [
+    { "type": "text", "id": "lead_quote", "label": "Lead quote", "default": "Chaos done right" },
+    { "type": "text", "id": "lead_source", "label": "Lead source", "default": "Music News Monthly" },
+    {
+      "type": "textarea", "id": "awards_line", "label": "Awards line",
+      "info": "Confirm nominated vs won before publishing.",
+      "default": "Nominated at the Scottish Live Music Awards."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "quote",
+      "name": "Press quote",
+      "settings": [
+        { "type": "text", "id": "quote", "label": "Quote" },
+        { "type": "text", "id": "source", "label": "Source" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "The live record" }]
+}
+{% endschema %}
