@@ -13,6 +13,9 @@ import { safe } from "@/lib/safe";
 import { env } from "@/lib/env";
 import { SHOWS, RELEASES, upcomingShows, pastShows } from "@/lib/fixtures";
 import type { FixtureShow } from "@/lib/fixtures";
+import { MERCH, merchByHandle } from "@/lib/fixtures-merch";
+import { getProducts, getProduct } from "@/lib/shopify/queries";
+import type { Product } from "@/lib/shopify/types";
 import { CACHE_TAGS } from "@/lib/cache-tags";
 import type { Show, Release, SiteSettings } from "@/lib/sanity/types";
 
@@ -32,6 +35,16 @@ const useFixtures =
   process.env.NODE_ENV === "development" && !env.sanity.isConfigured;
 
 /**
+ * The same rule for merch, against Shopify rather than Sanity.
+ *
+ * Separate flag, not a shared one: the two services are connected at different
+ * times, and a live Shopify store must never be masked by fixture products just
+ * because Sanity is still missing.
+ */
+const useMerchFixtures =
+  process.env.NODE_ENV === "development" && !env.shopify.isConfigured;
+
+/**
  * Warns that a render is fixture-backed, once per read path per server process.
  *
  * The point is to make sure a fixture render is never mistaken for real data,
@@ -43,9 +56,9 @@ function fixtureNotice(label: string) {
   if (noticed.has(label)) return;
   noticed.add(label);
   console.warn(
-    `[content] ${label}: Sanity not configured — serving development fixtures ` +
-      `from src/lib/fixtures.ts. Dates are reconstructed from posters and need ` +
-      `band verification.`,
+    `[content] ${label}: service not configured — serving development fixtures. ` +
+      `Shows and releases are reconstructed from posters and need band ` +
+      `verification; merch prices and stock in fixtures-merch.ts are invented.`,
   );
 }
 
@@ -125,6 +138,30 @@ export async function readSoldOutCount(): Promise<number> {
       }, []);
 
   return shows.filter((s) => s.soldOut && !s.cancelled).length;
+}
+
+/**
+ * Merch, with the same development-only fixture fallback.
+ *
+ * Production never substitutes. If Shopify is unconfigured or down, "the store
+ * isn't open yet" is the honest answer and `safe()` logs why — the band holds
+ * the stock, so an invented product is an invented promise to ship something.
+ */
+export async function readProducts(): Promise<Product[]> {
+  if (useMerchFixtures) {
+    fixtureNotice("products");
+    return MERCH;
+  }
+  return safe("products", getProducts, []);
+}
+
+/** A single product for the product page. */
+export async function readProduct(handle: string): Promise<Product | null> {
+  if (useMerchFixtures) {
+    fixtureNotice("product");
+    return merchByHandle(handle);
+  }
+  return safe(`product:${handle}`, () => getProduct(handle), null);
 }
 
 /**

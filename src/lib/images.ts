@@ -70,6 +70,16 @@ export const IMAGES = {
     credit: null,
     creditConfirmed: false,
   },
+  merchTee: {
+    src: "/merch/tee-lying-down.png",
+    width: 1498,
+    height: 1494,
+    alt: "Black t-shirt with the heavyskint wordmark above a white line drawing of a person lying face-down.",
+    // The band's own product shot, supplied by them — unlike the live
+    // photography, this one has no third-party photographer question.
+    credit: null,
+    creditConfirmed: true,
+  },
   artworkHeSays: {
     src: "/press/artwork-hesays.webp",
     width: 1080,

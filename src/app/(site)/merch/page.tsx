@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { getProducts } from "@/lib/shopify/queries";
-import { safe } from "@/lib/safe";
 import { formatMoney } from "@/lib/format";
+import { readProducts } from "@/lib/content";
 import { PageHeading } from "@/components/site/PageHeading";
 import { Tag } from "@/components/ui/Tag";
 import type { Product } from "@/lib/shopify/types";
@@ -22,7 +21,7 @@ export const metadata: Metadata = {
  * shirt that sells out is also proof the shirt is worth having.
  */
 export default async function MerchPage() {
-  const products = await safe("merch:products", getProducts, [] as Product[]);
+  const products: Product[] = await readProducts();
 
   return (
     <>

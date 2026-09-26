@@ -1,8 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { readNextShow, readReleases, readSoldOutCount } from "@/lib/content";
-import { getProducts } from "@/lib/shopify/queries";
-import { safe } from "@/lib/safe";
+import { readNextShow, readReleases, readSoldOutCount, readProducts } from "@/lib/content";
 import { PRESS } from "@/lib/fixtures";
 import { IMAGES, RELEASE_COVERS } from "@/lib/images";
 import { PosterButton } from "@/components/ui/PosterButton";
@@ -26,7 +24,7 @@ export default async function HomePage() {
     readNextShow(),
     readReleases(),
     readSoldOutCount(),
-    safe("home:products", getProducts, []),
+    readProducts(),
   ]);
 
   const featured = products.slice(0, 3);

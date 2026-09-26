@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { getProduct } from "@/lib/shopify/queries";
+import { readProduct } from "@/lib/content";
 import { getCart } from "@/lib/shopify/cart";
 import { formatMoney } from "@/lib/format";
 import { PosterButton } from "@/components/ui/PosterButton";
@@ -28,7 +28,7 @@ type Props = { params: Promise<{ handle: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { handle } = await params;
-  const product = await getProduct(handle).catch(() => null);
+  const product = await readProduct(handle);
 
   if (!product) return { title: "Merch" };
 
@@ -90,7 +90,7 @@ async function ProductDetail({
 }: Props & { searchParams: Promise<{ cart?: string | string[] }> }) {
   const [{ handle }, { cart }] = await Promise.all([params, searchParams]);
   const cartStatus = typeof cart === "string" ? cart : undefined;
-  const product = await getProduct(handle).catch(() => null);
+  const product = await readProduct(handle);
 
   if (!product) notFound();
 
