@@ -92,8 +92,18 @@ a {
   text-underline-offset: 0.22em;
 }
 
+/**
+ * `height: auto` is not optional next to `max-width: 100%`.
+ *
+ * Without it, an <img> carrying width/height attributes has its width
+ * constrained by the container while the height attribute is still honoured
+ * literally — a square product shot rendered 568x1500. The attributes are still
+ * wanted, since they reserve the right box and avoid layout shift; this just
+ * keeps the ratio intact when the width is scaled down.
+ */
 img {
   max-width: 100%;
+  height: auto;
   display: block;
 }
 

@@ -78,14 +78,16 @@ const product = (handle, title, price, image, description, variants) => ({
   price,
   description,
   available: variants.some((v) => v.available),
-  featured_image: image ? { src: image, alt: `${title}` } : null,
+  featured_image: image
+    ? { src: image.src, alt: `${title}`, width: image.w, height: image.h }
+    : null,
   variants,
 });
 
 /** ⚠ Placeholder. No real store, no real stock, no real prices. */
 export const PRODUCTS = [
   // The only product with real photography — the band's actual shirt.
-  product("tour-tee", "tour tee", 2500, "merch-tee.png",
+  product("tour-tee", "tour tee", 2500, { src: "merch-tee.png", w: 1498, h: 1494 },
     "<p>Black heavyweight cotton. Wordmark and the lying-down line drawing, front print.</p>", [
       variant("v-s", "S", 2500, true),
       variant("v-m", "M", 2500, true),

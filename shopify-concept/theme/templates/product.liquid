@@ -15,8 +15,14 @@
     <div>
       {% if product.featured_image %}
         <div class="hs-grain" style="position:relative;overflow:hidden;background:var(--hs-ink-raised)">
+          {%- comment -%}
+            Dimensions come from the image itself, never hardcoded: a product
+            shot can be any shape, and guessing 4:5 distorted a square one.
+          {%- endcomment -%}
           <img src="{{ product.featured_image | image_url: width: 1200 }}"
-               alt="{{ product.featured_image.alt | default: product.title | escape }}" width="1200" height="1500">
+               alt="{{ product.featured_image.alt | default: product.title | escape }}"
+               width="{{ product.featured_image.width }}"
+               height="{{ product.featured_image.height }}">
         </div>
       {% endif %}
     </div>
