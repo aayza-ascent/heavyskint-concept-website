@@ -36,7 +36,9 @@ function Mark({
 }: MarkProps & { src: string; ratio: number }) {
   return (
     <span
-      className={`inline-block bg-current align-middle ${className ?? ""}`}
+      // `inline-flex`, not `inline-block`: the `block` spacing token turns
+      // `inline-block` into a 1rem inline-size that beats the width classes.
+      className={`inline-flex bg-current align-middle ${className ?? ""}`}
       // Width or height alone sizes the mark; aspect-ratio supplies the other.
       style={{
         aspectRatio: ratio,

@@ -23,6 +23,9 @@
 
   --spacing-hair: var(--hs-space-hair);
   --spacing-tight: var(--hs-space-tight);
+  /* Careful: this also makes Tailwind's `inline-block` mean
+     `inline-size: var(--hs-space-block)`, overriding any width class on the
+     same element. Use `inline-flex` or `block` for display instead. */
   --spacing-block: var(--hs-space-block);
   --spacing-step: var(--hs-space-step);
   --spacing-gap: var(--hs-space-gap);

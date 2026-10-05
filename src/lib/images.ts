@@ -30,6 +30,16 @@ export type SiteImage = {
 };
 
 export const IMAGES = {
+  bandAlley: {
+    src: "/press/band-alley.webp",
+    width: 2400,
+    height: 1600,
+    alt: "heavyskint, all five, in black and white against a graffitied brick wall — Jacob Hunter in a white track jacket, the drummer crouched at the front.",
+    // A full-resolution press shot supplied by the band (downscaled from
+    // 6720×4480), not an Instagram grab. Photographer still to confirm.
+    credit: null,
+    creditConfirmed: false,
+  },
   bandBridge: {
     src: "/press/band-bridge.webp",
     width: 1080,

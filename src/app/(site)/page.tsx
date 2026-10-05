@@ -11,7 +11,6 @@ import { IMAGES, RELEASE_COVERS } from "@/lib/images";
 import { MERCH_ONLINE, STREAMING } from "@/lib/site";
 import { PosterButton } from "@/components/ui/PosterButton";
 import { ShowStatus } from "@/components/ui/Tag";
-import { Lockup } from "@/components/ui/Wordmark";
 import { MailingList } from "@/components/site/MailingList";
 import { showDate, isoDate, longDate, formatMoney } from "@/lib/format";
 
@@ -24,9 +23,9 @@ import { showDate, isoDate, longDate, formatMoney } from "@/lib/format";
  * rather than with a welcome, and the only things above the fold are that claim,
  * what they sound like, and the next date.
  *
- * Composition follows the poster frame: the band's own lockup sits over the
- * photograph of all five of them, the words follow on the black beneath it,
- * and the black between blocks does the pacing.
+ * Composition follows the poster frame: the photograph of all five of them
+ * stands on its own, the words follow on the black beneath it, and the black
+ * between blocks does the pacing.
  */
 export default async function HomePage(props: PageProps<"/">) {
   const [nextShow, releases, soldOutCount, products] = await Promise.all([
@@ -42,31 +41,20 @@ export default async function HomePage(props: PageProps<"/">) {
   return (
     <>
       {/* ── Hero ──────────────────────────────────────────────
-          The whole band, with their own lockup — the face-down figure over
-          the wordmark — in the open concrete above their heads. Nothing else
-          sits on the photograph: the introduction follows below it. */}
-      <section className="hs-grain relative isolate flex min-h-[88svh] flex-col overflow-hidden">
+          The whole band against the graffiti wall, and nothing else on the
+          photograph: the header already carries the wordmark, and the
+          introduction follows below. The page's h1 is kept for screen
+          readers only. */}
+      <section className="hs-grain relative isolate aspect-[4/3] overflow-hidden sm:aspect-auto sm:min-h-[88svh]">
         <Image
-          src={IMAGES.bandBridge.src}
-          alt={IMAGES.bandBridge.alt}
+          src={IMAGES.bandAlley.src}
+          alt={IMAGES.bandAlley.alt}
           fill
           priority
           sizes="100vw"
-          className="-z-10 object-cover object-[center_65%]"
+          className="-z-10 object-cover object-[45%_center]"
         />
-        {/* Tonal layering, not a gradient scrim — the system's own depth
-            mechanism. One step of ink so the mark holds against the
-            mid-grey concrete without burying the band. */}
-        <div aria-hidden="true" className="absolute inset-0 -z-10 bg-ink/45" />
-
-        <div className="px-gutter pt-void">
-          <h1 className="hs-pass">
-            <Lockup
-              title="heavyskint."
-              className="w-[min(100%,34rem)] text-ink-white"
-            />
-          </h1>
-        </div>
+        <h1 className="sr-only">heavyskint.</h1>
       </section>
 
       <section className="px-gutter py-void">
