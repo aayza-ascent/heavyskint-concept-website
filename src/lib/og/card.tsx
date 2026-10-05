@@ -35,7 +35,7 @@ const [displayFont, labelFont] = await Promise.all([
 ]);
 
 /*
- * The traced wordmark, inlined as a data URI.
+ * The band's wordmark, inlined as a data URI.
  *
  * The committed SVG paints with `fill="currentColor"` so it inherits text
  * colour in the app. Inside an <img> there is no inheriting element and
@@ -49,9 +49,9 @@ const wordmarkSvg = (await readFile(
 )).replaceAll("currentColor", INK_WHITE);
 const wordmarkSrc = `data:image/svg+xml;base64,${Buffer.from(wordmarkSvg).toString("base64")}`;
 
-/** Intrinsic wordmark ratio, from its viewBox (1317x258). */
+/** Intrinsic wordmark ratio, from its viewBox (747.2x146.2). */
 const WORDMARK_WIDTH = 420;
-const WORDMARK_HEIGHT = Math.round(WORDMARK_WIDTH * (258 / 1317));
+const WORDMARK_HEIGHT = Math.round(WORDMARK_WIDTH * (146.2 / 747.2));
 
 /* Tokens, restated as literals. Satori resolves no custom properties, and a
    stylesheet import would not reach it — mirror of src/styles/tokens.css. */

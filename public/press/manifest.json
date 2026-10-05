@@ -1,5 +1,13 @@
 [
   {
+    "name": "band-bridge",
+    "file": "/press/band-bridge.webp",
+    "width": 1080,
+    "height": 1440,
+    "sourceFile": "heavyskint_introducing_our_new_bass_player_maddie._her_first_gig_with_u_2026-07-03_DaViBKrCFr2_3933199463338236662_3.jpg",
+    "bytes": 93810
+  },
+  {
     "name": "live-mic",
     "file": "/press/live-mic.webp",
     "width": 1400,

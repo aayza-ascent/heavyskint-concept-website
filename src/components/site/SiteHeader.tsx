@@ -6,8 +6,7 @@ import { HeaderNav, HeaderNavWithPath } from "@/components/site/HeaderNav";
 /**
  * Site header.
  *
- * A Server Component so the wordmark — 10KB of traced outline — stays out of
- * the client bundle. Only the navigation needs the current route, and reading
+ * A Server Component. Only the navigation needs the current route, and reading
  * it suspends during prerendering on routes with fallback params, so it sits
  * behind a Suspense boundary whose fallback is the same nav without the active
  * highlight. Same geometry, so nothing shifts when it resolves.

@@ -80,6 +80,15 @@ function releaseDoc(release: (typeof RELEASES)[number]) {
     title: release.title,
     type: release.type,
     releaseDate: release.releaseDate,
+    // Sanity array items need a stable `_key`; the platform name is unique per release.
+    ...(release.links
+      ? {
+          links: release.links.map((link) => ({
+            _key: link.platform.toLowerCase().replace(/\W+/g, "-"),
+            ...link,
+          })),
+        }
+      : {}),
   };
 }
 

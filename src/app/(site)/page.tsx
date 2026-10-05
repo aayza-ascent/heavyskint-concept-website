@@ -1,6 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import { readNextShow, readReleases, readSoldOutCount, readProducts } from "@/lib/content";
+import {
+  readNextShow,
+  readReleases,
+  readSoldOutCount,
+  readProducts,
+} from "@/lib/content";
 import { PRESS } from "@/lib/fixtures";
 import { IMAGES, RELEASE_COVERS } from "@/lib/images";
 import { PosterButton } from "@/components/ui/PosterButton";
@@ -51,9 +56,7 @@ export default async function HomePage() {
         <div aria-hidden="true" className="absolute inset-0 -z-10 bg-ink/75" />
 
         <div className="px-gutter pt-void">
-          <h1 className="hs-display hs-pass text-ink-white">
-            sold out every show in scotland.
-          </h1>
+          <h1 className="hs-display hs-pass text-ink-white">heavyskint.</h1>
         </div>
 
         <div className="flex flex-col gap-gap px-gutter pb-void pt-chasm">
@@ -107,7 +110,9 @@ export default async function HomePage() {
                 soldOut={nextShow.soldOut}
                 cancelled={nextShow.cancelled}
               />
-              {nextShow.ticketUrl && !nextShow.soldOut && !nextShow.cancelled ? (
+              {nextShow.ticketUrl &&
+              !nextShow.soldOut &&
+              !nextShow.cancelled ? (
                 <PosterButton href={nextShow.ticketUrl} external>
                   Tickets
                 </PosterButton>
