@@ -84,6 +84,13 @@ export const env = {
   get bookingEmailTo() {
     return required("BOOKING_EMAIL_TO");
   },
+  /**
+   * Resend segment the mailing list signs people up to. Optional: until it is
+   * set, the sign-up form says sign-ups aren't open yet instead of failing.
+   */
+  get newsletterSegmentId() {
+    return optional("RESEND_NEWSLETTER_SEGMENT_ID");
+  },
 
   get siteUrl() {
     return process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";

@@ -51,7 +51,9 @@ function Mark({
 }
 
 export function Wordmark(props: MarkProps) {
-  return <Mark src="/wordmark/heavyskint.svg" ratio={WORDMARK_RATIO} {...props} />;
+  return (
+    <Mark src="/wordmark/heavyskint.svg" ratio={WORDMARK_RATIO} {...props} />
+  );
 }
 
 export function Lockup(props: MarkProps) {

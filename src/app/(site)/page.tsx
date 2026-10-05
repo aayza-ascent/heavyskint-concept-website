@@ -8,8 +8,11 @@ import {
 } from "@/lib/content";
 import { PRESS } from "@/lib/fixtures";
 import { IMAGES, RELEASE_COVERS } from "@/lib/images";
+import { MERCH_ONLINE, STREAMING } from "@/lib/site";
 import { PosterButton } from "@/components/ui/PosterButton";
 import { ShowStatus } from "@/components/ui/Tag";
+import { Lockup } from "@/components/ui/Wordmark";
+import { MailingList } from "@/components/site/MailingList";
 import { showDate, isoDate, longDate, formatMoney } from "@/lib/format";
 
 /**
@@ -21,15 +24,16 @@ import { showDate, isoDate, longDate, formatMoney } from "@/lib/format";
  * rather than with a welcome, and the only things above the fold are that claim,
  * what they sound like, and the next date.
  *
- * Composition follows the poster frame: the photograph fills the middle, the
- * words are pushed to the edges, and the black between blocks does the pacing.
+ * Composition follows the poster frame: the band's own lockup sits over the
+ * photograph of all five of them, the words follow on the black beneath it,
+ * and the black between blocks does the pacing.
  */
-export default async function HomePage() {
+export default async function HomePage(props: PageProps<"/">) {
   const [nextShow, releases, soldOutCount, products] = await Promise.all([
     readNextShow(),
     readReleases(),
     readSoldOutCount(),
-    readProducts(),
+    MERCH_ONLINE ? readProducts() : [],
   ]);
 
   const featured = products.slice(0, 3);
@@ -38,45 +42,51 @@ export default async function HomePage() {
   return (
     <>
       {/* ── Hero ──────────────────────────────────────────────
-          The image is near-black by nature (71% of its pixels below L=24),
-          which is why the display type sits straight on it with no scrim. */}
-      <section className="hs-grain relative isolate flex min-h-[88svh] flex-col justify-between overflow-hidden">
+          The whole band, with their own lockup — the face-down figure over
+          the wordmark — in the open concrete above their heads. Nothing else
+          sits on the photograph: the introduction follows below it. */}
+      <section className="hs-grain relative isolate flex min-h-[88svh] flex-col overflow-hidden">
         <Image
-          src={IMAGES.liveMic.src}
-          alt={IMAGES.liveMic.alt}
+          src={IMAGES.bandBridge.src}
+          alt={IMAGES.bandBridge.alt}
           fill
           priority
           sizes="100vw"
-          className="-z-10 object-cover object-[60%_center]"
+          className="-z-10 object-cover object-[center_65%]"
         />
         {/* Tonal layering, not a gradient scrim — the system's own depth
-            mechanism. The frame is already 71% below L=24, but the subject's
-            lit jacket sits exactly where the body copy lands, which measured
-            at 1.2:1 without this. */}
-        <div aria-hidden="true" className="absolute inset-0 -z-10 bg-ink/75" />
+            mechanism. One step of ink so the mark holds against the
+            mid-grey concrete without burying the band. */}
+        <div aria-hidden="true" className="absolute inset-0 -z-10 bg-ink/45" />
 
         <div className="px-gutter pt-void">
-          <h1 className="hs-display hs-pass text-ink-white">heavyskint.</h1>
+          <h1 className="hs-pass">
+            <Lockup
+              title="heavyskint."
+              className="w-[min(100%,34rem)] text-ink-white"
+            />
+          </h1>
         </div>
+      </section>
 
-        <div className="flex flex-col gap-gap px-gutter pb-void pt-chasm">
-          <p className="hs-body text-ink-white">
-            A five-piece from Glasgow: 90s shoegaze, grunge and alt-rock with a
-            soulful tinge and an unfiltered intensity.
-          </p>
+      <section className="px-gutter py-void">
+        <p className="hs-body max-w-[40rem] text-ink-white">
+          A five-piece from Glasgow: 90s shoegaze, grunge and alt-rock with a
+          soulful tinge and an unfiltered intensity.
+        </p>
 
-          <div className="flex flex-wrap items-center gap-block">
-            <PosterButton href="/shows">All shows</PosterButton>
-            <PosterButton href="/music" variant="ghost">
-              Listen
-            </PosterButton>
-          </div>
+        <div className="mt-gap flex flex-wrap items-center gap-block">
+          <PosterButton href="/shows">All shows</PosterButton>
+          <PosterButton href="/music" variant="ghost">
+            Listen
+          </PosterButton>
         </div>
       </section>
 
       {/* ── Next show ─────────────────────────────────────────
           The one thing a convinced visitor can act on right now, so it gets
-          its own surface rather than a row in a list. */}
+          its own surface rather than a row in
+           a list. */}
       <section
         aria-labelledby="next-show"
         className="border-t border-smoke px-gutter py-void"
@@ -208,6 +218,16 @@ export default async function HomePage() {
           </Link>
         </div>
 
+        <ul className="mt-step flex flex-wrap gap-block">
+          {STREAMING.map((link) => (
+            <li key={link.platform}>
+              <PosterButton href={link.url} variant="ghost" external>
+                {link.platform}
+              </PosterButton>
+            </li>
+          ))}
+        </ul>
+
         {releases.length > 0 && latest ? (
           <div className="mt-gap grid grid-cols-1 gap-gap md:grid-cols-[1fr_1fr]">
             <article>
@@ -230,6 +250,22 @@ export default async function HomePage() {
                   {longDate(latest.releaseDate)}
                 </time>
               </p>
+              {latest.links && latest.links.length > 0 ? (
+                <ul className="mt-block flex flex-wrap gap-x-step gap-y-tight">
+                  {latest.links.map((link) => (
+                    <li key={link.url}>
+                      <a
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="hs-label text-ink-white underline transition-colors duration-[120ms] ease-[steps(2,end)] hover:text-flash"
+                      >
+                        {link.platform}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
             </article>
 
             <ul className="flex flex-col">
@@ -271,67 +307,91 @@ export default async function HomePage() {
       {/* ── Merch ─────────────────────────────────────────────
           Stock is held by the band and sold at shows through the same
           inventory, so an out-of-stock state here is normal and gets said
-          plainly rather than hidden. */}
-      <section
-        aria-labelledby="merch"
-        className="border-t border-smoke px-gutter py-void"
-      >
-        <div className="flex flex-wrap items-baseline justify-between gap-block">
+          plainly rather than hidden.
+
+          The grid is switched off while MERCH_ONLINE is false (src/lib/site.ts):
+          the band isn't selling online yet, and the section says that instead. */}
+      {!MERCH_ONLINE ? (
+        <section
+          aria-labelledby="merch"
+          className="border-t border-smoke px-gutter py-void"
+        >
           <h2 id="merch" className="hs-headline text-ink-white">
             merch
           </h2>
-          {featured.length > 0 ? (
-            <Link
-              href="/merch"
-              className="hs-label text-ink-white underline transition-colors duration-[120ms] ease-[steps(2,end)] hover:text-flash"
-            >
-              Everything
-            </Link>
-          ) : null}
-        </div>
-
-        {featured.length > 0 ? (
-          <ul className="mt-gap grid grid-cols-2 gap-step md:grid-cols-3">
-            {featured.map((product) => (
-              <li key={product.id}>
-                <Link href={`/merch/${product.handle}`} className="group block">
-                  <div className="hs-grain relative aspect-[4/5] overflow-hidden border border-smoke bg-ink-raised transition-colors duration-[120ms] ease-[steps(2,end)] group-hover:border-flash">
-                    {product.featuredImage ? (
-                      <Image
-                        src={product.featuredImage.url}
-                        alt={product.featuredImage.altText ?? product.title}
-                        fill
-                        sizes="(min-width: 768px) 33vw, 50vw"
-                        className="object-cover"
-                      />
-                    ) : null}
-                  </div>
-                  <h3 className="hs-title mt-block text-ink-white">
-                    {product.title}
-                  </h3>
-                  <p className="hs-label mt-hair text-smoke">
-                    {product.availableForSale
-                      ? formatMoney(product.priceRange.minVariantPrice)
-                      : "Sold out"}
-                  </p>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <div className="mt-step">
-            <p className="hs-title text-ink-white">
-              the store isn&rsquo;t open yet
-            </p>
-            <p className="hs-body mt-tight text-smoke">
-              Until it is, merch is on the table at every show.
-            </p>
+          <p className="hs-title mt-step text-ink-white">
+            currently not selling merch online
+          </p>
+          <p className="hs-body mt-tight text-smoke">
+            Merch is on the table at every show.
+          </p>
+        </section>
+      ) : (
+        <section
+          aria-labelledby="merch"
+          className="border-t border-smoke px-gutter py-void"
+        >
+          <div className="flex flex-wrap items-baseline justify-between gap-block">
+            <h2 id="merch" className="hs-headline text-ink-white">
+              merch
+            </h2>
+            {featured.length > 0 ? (
+              <Link
+                href="/merch"
+                className="hs-label text-ink-white underline transition-colors duration-[120ms] ease-[steps(2,end)] hover:text-flash"
+              >
+                Everything
+              </Link>
+            ) : null}
           </div>
-        )}
-      </section>
 
-      {/* Minimal, and only facts the band has confirmed. No sameAs links until
-          the streaming URLs are supplied. */}
+          {featured.length > 0 ? (
+            <ul className="mt-gap grid grid-cols-2 gap-step md:grid-cols-3">
+              {featured.map((product) => (
+                <li key={product.id}>
+                  <Link
+                    href={`/merch/${product.handle}`}
+                    className="group block"
+                  >
+                    <div className="hs-grain relative aspect-[4/5] overflow-hidden border border-smoke bg-ink-raised transition-colors duration-[120ms] ease-[steps(2,end)] group-hover:border-flash">
+                      {product.featuredImage ? (
+                        <Image
+                          src={product.featuredImage.url}
+                          alt={product.featuredImage.altText ?? product.title}
+                          fill
+                          sizes="(min-width: 768px) 33vw, 50vw"
+                          className="object-cover"
+                        />
+                      ) : null}
+                    </div>
+                    <h3 className="hs-title mt-block text-ink-white">
+                      {product.title}
+                    </h3>
+                    <p className="hs-label mt-hair text-smoke">
+                      {product.availableForSale
+                        ? formatMoney(product.priceRange.minVariantPrice)
+                        : "Sold out"}
+                    </p>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className="mt-step">
+              <p className="hs-title text-ink-white">
+                the store isn&rsquo;t open yet
+              </p>
+              <p className="hs-body mt-tight text-smoke">
+                Until it is, merch is on the table at every show.
+              </p>
+            </div>
+          )}
+        </section>
+      )}
+
+      <MailingList searchParams={props.searchParams} />
+
+      {/* Minimal, and only facts the band has confirmed. */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -339,6 +399,7 @@ export default async function HomePage() {
             "@context": "https://schema.org",
             "@type": "MusicGroup",
             name: "heavyskint",
+            sameAs: STREAMING.map((link) => link.url),
             genre: ["Shoegaze", "Grunge", "Alternative rock"],
             foundingLocation: {
               "@type": "Place",

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Wordmark } from "@/components/ui/Wordmark";
 import { ArrowUpRight } from "@/components/ui/Icon";
 import { readSiteSettings } from "@/lib/content";
+import { MERCH_ONLINE } from "@/lib/site";
 
 /**
  * Footer.
@@ -85,12 +86,14 @@ export async function SiteFooter() {
         */}
         <div className="mt-void flex flex-wrap items-baseline gap-x-block gap-y-tight">
           <nav aria-label="Legal" className="flex flex-wrap gap-block">
-            <Link
-              href="/returns"
-              className="hs-meta text-smoke underline transition-colors duration-[120ms] ease-[steps(2,end)] hover:text-ink-white"
-            >
-              Returns
-            </Link>
+            {MERCH_ONLINE ? (
+              <Link
+                href="/returns"
+                className="hs-meta text-smoke underline transition-colors duration-[120ms] ease-[steps(2,end)] hover:text-ink-white"
+              >
+                Returns
+              </Link>
+            ) : null}
             <Link
               href="/privacy"
               className="hs-meta text-smoke underline transition-colors duration-[120ms] ease-[steps(2,end)] hover:text-ink-white"

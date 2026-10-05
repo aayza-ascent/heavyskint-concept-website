@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getProducts } from "@/lib/shopify/queries";
 import { safe } from "@/lib/safe";
-import { absoluteUrl } from "@/lib/site";
+import { absoluteUrl, MERCH_ONLINE } from "@/lib/site";
 
 /**
  * sitemap.xml.
@@ -25,14 +25,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: absoluteUrl("/"), changeFrequency: "weekly", priority: 1 },
     { url: absoluteUrl("/shows"), changeFrequency: "weekly", priority: 1 },
     { url: absoluteUrl("/music"), changeFrequency: "monthly", priority: 0.8 },
-    { url: absoluteUrl("/merch"), changeFrequency: "weekly", priority: 0.7 },
     { url: absoluteUrl("/about"), changeFrequency: "yearly", priority: 0.5 },
     { url: absoluteUrl("/contact"), changeFrequency: "yearly", priority: 0.5 },
-    // Low priority, but indexed: a customer searching "heavyskint returns"
-    // should land on the policy rather than on a contact form.
-    { url: absoluteUrl("/returns"), changeFrequency: "yearly", priority: 0.3 },
     { url: absoluteUrl("/privacy"), changeFrequency: "yearly", priority: 0.3 },
   ];
+
+  // The shop's pages only exist while it is open — see MERCH_ONLINE.
+  if (!MERCH_ONLINE) return staticRoutes;
 
   // Empty until Shopify is connected, which is the correct output rather than a
   // failure — `safe` keeps an unreachable store from failing the whole build.
@@ -40,6 +39,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     ...staticRoutes,
+    { url: absoluteUrl("/merch"), changeFrequency: "weekly", priority: 0.7 },
+    // Low priority, but indexed: a customer searching "heavyskint returns"
+    // should land on the policy rather than on a contact form.
+    { url: absoluteUrl("/returns"), changeFrequency: "yearly", priority: 0.3 },
     ...products.map((product) => ({
       url: absoluteUrl(`/merch/${product.handle}`),
       changeFrequency: "weekly" as const,

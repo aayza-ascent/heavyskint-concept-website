@@ -7,6 +7,8 @@ import { RELEASE_COVERS } from "@/lib/images";
 import { urlForImage } from "@/lib/sanity/image";
 import { env } from "@/lib/env";
 import { longDate, isoDate } from "@/lib/format";
+import { STREAMING } from "@/lib/site";
+import { PosterButton } from "@/components/ui/PosterButton";
 
 export const metadata: Metadata = {
   title: "Music",
@@ -34,6 +36,17 @@ export default async function MusicPage() {
     <>
       <PageHeading title="music" />
 
+      {/* Artist-level first, for anyone who just wants to follow. */}
+      <ul className="flex flex-wrap gap-block px-gutter pb-gap">
+        {STREAMING.map((link) => (
+          <li key={link.platform}>
+            <PosterButton href={link.url} external>
+              {link.platform}
+            </PosterButton>
+          </li>
+        ))}
+      </ul>
+
       {releases.length > 0 ? (
         <div>
           {releases.map((release, index) => {
@@ -47,7 +60,8 @@ export default async function MusicPage() {
                 : undefined;
             const fallback = RELEASE_COVERS[release.title];
             const coverSrc = sanityCover ?? fallback?.src;
-            const coverAlt = fallback?.alt ?? `Cover artwork for ${release.title}`;
+            const coverAlt =
+              fallback?.alt ?? `Cover artwork for ${release.title}`;
 
             return (
               <article

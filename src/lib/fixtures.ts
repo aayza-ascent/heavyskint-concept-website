@@ -170,8 +170,14 @@ export const RELEASES: Release[] = [
     type: "single",
     releaseDate: "2026-05-28",
     links: [
-      { platform: "Spotify", url: "https://open.spotify.com/track/3aaODn0KQ0zBzI1luncJ01" },
-      { platform: "Apple Music", url: "https://music.apple.com/gb/album/he-says-she-says/6765784563?i=6765784564" },
+      {
+        platform: "Spotify",
+        url: "https://open.spotify.com/track/3aaODn0KQ0zBzI1luncJ01",
+      },
+      {
+        platform: "Apple Music",
+        url: "https://music.apple.com/gb/album/he-says-she-says/6765784563?i=6765784564",
+      },
     ],
   },
   {
@@ -180,8 +186,14 @@ export const RELEASES: Release[] = [
     type: "single",
     releaseDate: "2026-02-06",
     links: [
-      { platform: "Spotify", url: "https://open.spotify.com/track/4xxrmE2KTJ3Zu3wlhlYTg6" },
-      { platform: "Apple Music", url: "https://music.apple.com/gb/album/when-are-you-coming-for-me-jesus/1866899588?i=1866899591" },
+      {
+        platform: "Spotify",
+        url: "https://open.spotify.com/track/4xxrmE2KTJ3Zu3wlhlYTg6",
+      },
+      {
+        platform: "Apple Music",
+        url: "https://music.apple.com/gb/album/when-are-you-coming-for-me-jesus/1866899588?i=1866899591",
+      },
     ],
   },
   {
@@ -190,8 +202,14 @@ export const RELEASES: Release[] = [
     type: "single",
     releaseDate: "2025-10-24",
     links: [
-      { platform: "Spotify", url: "https://open.spotify.com/track/70AH35PzCjRiWEuWdDAaSy" },
-      { platform: "Apple Music", url: "https://music.apple.com/gb/album/vice/1838540833?i=1838540834" },
+      {
+        platform: "Spotify",
+        url: "https://open.spotify.com/track/70AH35PzCjRiWEuWdDAaSy",
+      },
+      {
+        platform: "Apple Music",
+        url: "https://music.apple.com/gb/album/vice/1838540833?i=1838540834",
+      },
     ],
   },
 ];

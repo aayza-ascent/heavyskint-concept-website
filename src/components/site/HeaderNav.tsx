@@ -5,14 +5,16 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Wordmark } from "@/components/ui/Wordmark";
 import { Menu, Close } from "@/components/ui/Icon";
+import { MERCH_ONLINE } from "@/lib/site";
 
 const ROUTES = [
   { href: "/shows", label: "Shows" },
   { href: "/music", label: "Music" },
-  { href: "/merch", label: "Merch" },
+  // Hidden while the shop is closed — see MERCH_ONLINE.
+  ...(MERCH_ONLINE ? [{ href: "/merch", label: "Merch" }] : []),
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
-] as const;
+];
 
 function isActive(pathname: string | null, href: string) {
   if (!pathname) return false;

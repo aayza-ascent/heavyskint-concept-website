@@ -84,8 +84,8 @@ export function MailingList({
         mailing list
       </h2>
       <p className="hs-body mt-block max-w-[36rem] text-smoke">
-        New shows and releases, straight to your inbox before anywhere else.
-        Not often, and you can unsubscribe from any email.
+        New shows and releases, straight to your inbox before anywhere else. Not
+        often, and you can unsubscribe from any email.
       </p>
 
       {/* Reading the query string would block the page from prerendering, so
@@ -100,7 +100,10 @@ export function MailingList({
         className="mt-step flex max-w-[36rem] flex-col gap-block sm:flex-row sm:items-end"
       >
         <div className="flex-1">
-          <label htmlFor="newsletter-email" className="hs-label block text-smoke">
+          <label
+            htmlFor="newsletter-email"
+            className="hs-label block text-smoke"
+          >
             Email address
           </label>
           <input

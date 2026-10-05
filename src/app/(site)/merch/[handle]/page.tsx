@@ -9,6 +9,7 @@ import { PosterButton } from "@/components/ui/PosterButton";
 import { Tag } from "@/components/ui/Tag";
 import { ArrowUpRight } from "@/components/ui/Icon";
 import { addVariantToCart } from "./actions";
+import { MERCH_ONLINE } from "@/lib/site";
 
 type Props = { params: Promise<{ handle: string }> };
 
@@ -88,6 +89,9 @@ async function ProductDetail({
   params,
   searchParams,
 }: Props & { searchParams: Promise<{ cart?: string | string[] }> }) {
+  // Product pages don't exist while the shop is closed — see MERCH_ONLINE.
+  if (!MERCH_ONLINE) notFound();
+
   const [{ handle }, { cart }] = await Promise.all([params, searchParams]);
   const cartStatus = typeof cart === "string" ? cart : undefined;
   const product = await readProduct(handle);
@@ -194,11 +198,7 @@ async function ProductDetail({
                 </div>
               </fieldset>
             ) : (
-              <input
-                type="hidden"
-                name="variantId"
-                value={firstAvailable.id}
-              />
+              <input type="hidden" name="variantId" value={firstAvailable.id} />
             )}
 
             <div className="mt-step">
@@ -234,10 +234,7 @@ export default function ProductPage(props: PageProps<"/merch/[handle]">) {
         </div>
       }
     >
-      <ProductDetail
-        params={props.params}
-        searchParams={props.searchParams}
-      />
+      <ProductDetail params={props.params} searchParams={props.searchParams} />
     </Suspense>
   );
 }

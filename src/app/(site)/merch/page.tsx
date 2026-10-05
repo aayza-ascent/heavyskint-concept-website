@@ -6,10 +6,13 @@ import { readProducts } from "@/lib/content";
 import { PageHeading } from "@/components/site/PageHeading";
 import { Tag } from "@/components/ui/Tag";
 import type { Product } from "@/lib/shopify/types";
+import { MERCH_ONLINE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Merch",
-  description: "Official heavyskint merch. Shipped from Scotland.",
+  description: MERCH_ONLINE
+    ? "Official heavyskint merch. Shipped from Scotland."
+    : "heavyskint merch is sold at shows. Not currently sold online.",
 };
 
 /**
@@ -21,6 +24,24 @@ export const metadata: Metadata = {
  * shirt that sells out is also proof the shirt is worth having.
  */
 export default async function MerchPage() {
+  // The shop is closed (src/lib/site.ts). The route stays up so an old link or
+  // a typed URL gets a plain answer rather than a 404.
+  if (!MERCH_ONLINE) {
+    return (
+      <>
+        <PageHeading title="merch" />
+        <section className="border-t border-smoke px-gutter py-void">
+          <p className="hs-headline text-ink-white">
+            currently not selling merch online
+          </p>
+          <p className="hs-body mt-block text-smoke">
+            Merch is on the table at every show.
+          </p>
+        </section>
+      </>
+    );
+  }
+
   const products: Product[] = await readProducts();
 
   return (

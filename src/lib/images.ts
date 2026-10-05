@@ -1,8 +1,8 @@
 /**
  * Shipped imagery.
  *
- * Six images, each chosen for what it does on the page rather than for being
- * the nicest picture: a near-black frame for the hero so display type can sit
+ * Seven images, each chosen for what it does on the page rather than for being
+ * the nicest picture: the whole band for the hero, a near-black frame so type can sit
  * straight in the black, a crowdsurf at a full King Tut's as evidence for the
  * sold-out streak, a backlit frame that shows the palette's flash value in
  * situ, and the three release covers.
@@ -30,6 +30,16 @@ export type SiteImage = {
 };
 
 export const IMAGES = {
+  bandBridge: {
+    src: "/press/band-bridge.webp",
+    width: 1080,
+    height: 1440,
+    alt: "heavyskint, all five, standing under a concrete flyover — Jacob Hunter at the front in a white track jacket.",
+    // From the band's July 2026 post introducing Maddie on bass. Instagram
+    // resolution only: swap in the photographer's original before launch.
+    credit: null,
+    creditConfirmed: false,
+  },
   liveMic: {
     src: "/press/live-mic.webp",
     width: 1400,
