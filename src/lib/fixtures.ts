@@ -1,15 +1,12 @@
-import type { Show, Release } from "@/lib/sanity/types";
+import type { Show } from "@/lib/sanity/types";
 
 /**
  * Real archive content, reconstructed from the band's own posters and captions.
  *
- * Two jobs:
- *   1. Development preview when Sanity isn't wired up yet, so the design is
- *      verified against real string lengths — "Humber Street Sesh",
- *      "Elephant's Head, Camden", three support acts on one line — instead of
- *      against an empty state or lorem.
- *   2. The seed source for Sanity (see sanity/seed.ts), so the band starts with
- *      their own history already in the CMS rather than a blank dataset.
+ * Development preview of shows when the Bandsintown key isn't set, so the
+ * design is verified against real string lengths — "Humber Street Sesh",
+ * "Elephant's Head, Camden", three support acts on one line — instead of
+ * against an empty state or lorem.
  *
  * ⚠ VERIFY BEFORE PUBLISHING. Dates and venues here are read off gig posters
  * and Instagram captions, not supplied by the band. Entries carrying
@@ -156,61 +153,6 @@ export const SHOWS: FixtureShow[] = [
     soldOut: false,
     cancelled: false,
     unverifiedDate: true,
-  },
-];
-
-/**
- * Streaming links verified against Spotify and Apple Music on 5 Oct 2026 —
- * each resolves to the heavyskint artist profile and the named track.
- */
-export const RELEASES: Release[] = [
-  {
-    _id: "release-he-says-she-says",
-    title: "he says, she says",
-    type: "single",
-    releaseDate: "2026-05-28",
-    links: [
-      {
-        platform: "Spotify",
-        url: "https://open.spotify.com/track/3aaODn0KQ0zBzI1luncJ01",
-      },
-      {
-        platform: "Apple Music",
-        url: "https://music.apple.com/gb/album/he-says-she-says/6765784563?i=6765784564",
-      },
-    ],
-  },
-  {
-    _id: "release-jesus",
-    title: "when are you coming for me jesus?",
-    type: "single",
-    releaseDate: "2026-02-06",
-    links: [
-      {
-        platform: "Spotify",
-        url: "https://open.spotify.com/track/4xxrmE2KTJ3Zu3wlhlYTg6",
-      },
-      {
-        platform: "Apple Music",
-        url: "https://music.apple.com/gb/album/when-are-you-coming-for-me-jesus/1866899588?i=1866899591",
-      },
-    ],
-  },
-  {
-    _id: "release-vice",
-    title: "vice",
-    type: "single",
-    releaseDate: "2025-10-24",
-    links: [
-      {
-        platform: "Spotify",
-        url: "https://open.spotify.com/track/70AH35PzCjRiWEuWdDAaSy",
-      },
-      {
-        platform: "Apple Music",
-        url: "https://music.apple.com/gb/album/vice/1838540833?i=1838540834",
-      },
-    ],
   },
 ];
 

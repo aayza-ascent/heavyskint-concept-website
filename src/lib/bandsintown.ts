@@ -7,12 +7,12 @@ import { env } from "@/lib/env";
 import type { Show } from "@/lib/sanity/types";
 
 /**
- * Upcoming shows from Bandsintown.
+ * Shows from Bandsintown, upcoming and past.
  *
- * The band already lists every date on Bandsintown, so that is where upcoming
- * shows are read from — one place to add a gig, and the site follows. The past
- * archive stays in Sanity, which carries the sold-out record reconstructed from
- * posters that Bandsintown does not hold.
+ * The band already lists every date on Bandsintown, so that is the only place
+ * shows are read from — one place to add a gig, and the site follows. Sanity is
+ * for releases. A sold-out flag or a tidy venue name has to be set on
+ * Bandsintown too, since there is nowhere else for it to come from.
  *
  * Bandsintown has no webhooks, so the read is cached for an hour and refreshed
  * in the background. A new date is on the site within the hour, no deploy.
@@ -70,16 +70,10 @@ function toShow(event: BandsintownEvent): Show {
   };
 }
 
-/** Upcoming shows, soonest first. */
-export async function getBandsintownUpcomingShows(): Promise<Show[]> {
-  "use cache";
-  cacheTag(CACHE_TAGS.shows);
-  cacheLife("hours");
-  if (!env.bandsintown.isConfigured) return [];
-
+async function fetchEvents(date: "upcoming" | "past") {
   const url = new URL(`https://rest.bandsintown.com/artists/${ARTIST}/events`);
   url.searchParams.set("app_id", env.bandsintown.appId);
-  url.searchParams.set("date", "upcoming");
+  url.searchParams.set("date", date);
 
   const response = await fetch(url, { headers: { Accept: "application/json" } });
   if (!response.ok) {
@@ -91,8 +85,33 @@ export async function getBandsintownUpcomingShows(): Promise<Show[]> {
   if (!Array.isArray(events)) {
     throw new Error(`Bandsintown returned ${JSON.stringify(events)}`);
   }
+  return events as BandsintownEvent[];
+}
 
-  return (events as BandsintownEvent[])
+/** Upcoming shows, soonest first. */
+export async function getBandsintownUpcomingShows(): Promise<Show[]> {
+  "use cache";
+  cacheTag(CACHE_TAGS.shows);
+  cacheLife("hours");
+  if (!env.bandsintown.isConfigured) return [];
+
+  return (await fetchEvents("upcoming"))
     .map(toShow)
     .sort((a, b) => a.date.localeCompare(b.date));
+}
+
+/** Past shows, most recent first. RSVP and Notify me mean nothing once played. */
+export async function getBandsintownPastShows(): Promise<Show[]> {
+  "use cache";
+  cacheTag(CACHE_TAGS.shows);
+  cacheLife("hours");
+  if (!env.bandsintown.isConfigured) return [];
+
+  return (await fetchEvents("past"))
+    .map((event) => ({
+      ...toShow(event),
+      rsvpUrl: undefined,
+      notifyUrl: undefined,
+    }))
+    .sort((a, b) => b.date.localeCompare(a.date));
 }

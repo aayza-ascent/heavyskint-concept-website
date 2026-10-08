@@ -24,10 +24,10 @@ export default defineConfig({
   plugins: [
     structureTool({
       /**
-       * The sidebar is the band's mental model, in their words: dates, music,
-       * photos, then the settings. Shows are split into Upcoming and Past
-       * because that is how they are asked about, and a flat list of every gig
-       * they have ever played buries the one they need to edit.
+       * The sidebar is the band's mental model, in their words: photos, then
+       * the settings. Shows and music are not here — they come from Bandsintown
+       * and Apple Music, and a second place to enter either is a second place
+       * for it to be wrong.
        *
        * Site settings is a singleton — one document, opened directly, with no
        * way to create a second one and wonder which is live.
@@ -36,44 +36,6 @@ export default defineConfig({
         S.list()
           .title("heavyskint")
           .items([
-            S.listItem()
-              .title("Shows")
-              .child(
-                S.list()
-                  .title("Shows")
-                  .items([
-                    S.listItem()
-                      .title("Upcoming")
-                      .child(
-                        S.documentList()
-                          .title("Upcoming shows")
-                          .filter('_type == "show" && date >= now()')
-                          .defaultOrdering([
-                            { field: "date", direction: "asc" },
-                          ]),
-                      ),
-                    S.listItem()
-                      .title("Past")
-                      .child(
-                        S.documentList()
-                          .title("Past shows")
-                          .filter('_type == "show" && date < now()')
-                          .defaultOrdering([
-                            { field: "date", direction: "desc" },
-                          ]),
-                      ),
-                    S.listItem()
-                      .title("All shows")
-                      .child(
-                        S.documentTypeList("show")
-                          .title("All shows")
-                          .defaultOrdering([
-                            { field: "date", direction: "desc" },
-                          ]),
-                      ),
-                  ]),
-              ),
-            S.documentTypeListItem("release").title("Music"),
             S.documentTypeListItem("galleryImage").title("Photos"),
             S.divider(),
             S.listItem()

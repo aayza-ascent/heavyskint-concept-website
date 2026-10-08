@@ -8,7 +8,6 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "next typegen && tsc --noEmit",
-    "seed": "node sanity/seed.mts",
     "detect": "npx --yes impeccable@4 detect src"
   },
   "dependencies": {

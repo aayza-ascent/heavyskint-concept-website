@@ -29,7 +29,11 @@ export type Release = {
   title: string;
   type: "album" | "ep" | "single";
   cover?: SanityImageSource;
+  /** Remote artwork, from Apple Music. */
+  coverUrl?: string;
   releaseDate: string;
+  /** The release's smart link (heavyskint.ffm.to/…), which lists every platform. */
+  streamUrl?: string;
   links?: ReleaseLink[];
   tracklist?: string[];
 };

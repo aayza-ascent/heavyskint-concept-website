@@ -116,3 +116,18 @@ export const RELEASE_COVERS: Record<string, SiteImage> = {
   "when are you coming for me jesus?": IMAGES.artworkJesus,
   "he says, she says": IMAGES.artworkHeSays,
 };
+
+/**
+ * A release's cover: Apple's artwork, which is full resolution, ahead of the
+ * shipped copy. The shipped entry still supplies the written alt text, which
+ * Apple has none of.
+ */
+export function releaseCover(release: {
+  title: string;
+  coverUrl?: string;
+}): { src: string; alt: string } | undefined {
+  const shipped = RELEASE_COVERS[release.title];
+  const src = release.coverUrl ?? shipped?.src;
+  if (!src) return undefined;
+  return { src, alt: shipped?.alt ?? `Cover artwork for ${release.title}` };
+}

@@ -7,7 +7,7 @@ import {
   readProducts,
 } from "@/lib/content";
 import { PRESS } from "@/lib/fixtures";
-import { IMAGES, RELEASE_COVERS } from "@/lib/images";
+import { IMAGES, releaseCover } from "@/lib/images";
 import { MERCH_ONLINE, STREAMING } from "@/lib/site";
 import { PosterButton } from "@/components/ui/PosterButton";
 import { ShowStatus } from "@/components/ui/Tag";
@@ -37,6 +37,7 @@ export default async function HomePage(props: PageProps<"/">) {
 
   const featured = products.slice(0, 3);
   const latest = releases[0];
+  const latestCover = latest ? releaseCover(latest) : undefined;
 
   return (
     <>
@@ -219,11 +220,11 @@ export default async function HomePage(props: PageProps<"/">) {
         {releases.length > 0 && latest ? (
           <div className="mt-gap grid grid-cols-1 gap-gap md:grid-cols-[1fr_1fr]">
             <article>
-              {RELEASE_COVERS[latest.title] ? (
+              {latestCover ? (
                 <div className="hs-grain relative aspect-square overflow-hidden">
                   <Image
-                    src={RELEASE_COVERS[latest.title].src}
-                    alt={RELEASE_COVERS[latest.title].alt}
+                    src={latestCover.src}
+                    alt={latestCover.alt}
                     fill
                     sizes="(min-width: 768px) 50vw, 100vw"
                     className="object-cover"
@@ -238,51 +239,50 @@ export default async function HomePage(props: PageProps<"/">) {
                   {longDate(latest.releaseDate)}
                 </time>
               </p>
-              {latest.links && latest.links.length > 0 ? (
-                <ul className="mt-block flex flex-wrap gap-x-step gap-y-tight">
-                  {latest.links.map((link) => (
-                    <li key={link.url}>
-                      <a
-                        href={link.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="hs-label text-ink-white underline transition-colors duration-[120ms] ease-[steps(2,end)] hover:text-flash"
-                      >
-                        {link.platform}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
+              {latest.streamUrl ? (
+                <a
+                  href={latest.streamUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hs-label mt-block inline-block text-ink-white underline transition-colors duration-[120ms] ease-[steps(2,end)] hover:text-flash"
+                >
+                  Stream
+                </a>
               ) : null}
             </article>
 
             <ul className="flex flex-col">
-              {releases.slice(1).map((release) => (
-                <li
-                  key={release._id}
-                  className="flex items-center gap-block border-t border-smoke py-step"
-                >
-                  {RELEASE_COVERS[release.title] ? (
-                    <div className="hs-grain relative h-[72px] w-[72px] shrink-0 overflow-hidden">
-                      <Image
-                        src={RELEASE_COVERS[release.title].src}
-                        alt={RELEASE_COVERS[release.title].alt}
-                        fill
-                        sizes="72px"
-                        className="object-cover"
-                      />
+              {releases.slice(1).map((release) => {
+                const cover = releaseCover(release);
+                return (
+                  <li
+                    key={release._id}
+                    className="flex items-center gap-block border-t border-smoke py-step"
+                  >
+                    {cover ? (
+                      <div className="hs-grain relative h-[72px] w-[72px] shrink-0 overflow-hidden">
+                        <Image
+                          src={cover.src}
+                          alt={cover.alt}
+                          fill
+                          sizes="72px"
+                          className="object-cover"
+                        />
+                      </div>
+                    ) : null}
+                    <div>
+                      <h3 className="hs-title text-ink-white">
+                        {release.title}
+                      </h3>
+                      <p className="hs-label mt-hair text-smoke">
+                        <time dateTime={isoDate(release.releaseDate)}>
+                          {longDate(release.releaseDate)}
+                        </time>
+                      </p>
                     </div>
-                  ) : null}
-                  <div>
-                    <h3 className="hs-title text-ink-white">{release.title}</h3>
-                    <p className="hs-label mt-hair text-smoke">
-                      <time dateTime={isoDate(release.releaseDate)}>
-                        {longDate(release.releaseDate)}
-                      </time>
-                    </p>
-                  </div>
-                </li>
-              ))}
+                  </li>
+                );
+              })}
             </ul>
           </div>
         ) : (

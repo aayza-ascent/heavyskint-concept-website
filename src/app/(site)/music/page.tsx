@@ -2,10 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { readReleases } from "@/lib/content";
 import { PageHeading } from "@/components/site/PageHeading";
-import { ArrowUpRight } from "@/components/ui/Icon";
-import { RELEASE_COVERS } from "@/lib/images";
-import { urlForImage } from "@/lib/sanity/image";
-import { env } from "@/lib/env";
+import { releaseCover } from "@/lib/images";
 import { longDate, isoDate } from "@/lib/format";
 import { STREAMING } from "@/lib/site";
 import { PosterButton } from "@/components/ui/PosterButton";
@@ -25,9 +22,9 @@ const TYPE_LABEL = { single: "Single", ep: "EP", album: "Album" } as const;
  * shot for these songs. Shrinking them into a grid of thumbnails would waste
  * the one asset the page exists to show.
  *
- * Streaming links come from Sanity so the band can add a platform themselves.
- * Where none are set the release still reads as a release rather than showing
- * dead buttons.
+ * Releases, dates and artwork come from Apple Music. Each release has one
+ * Stream button: the band's smart link where there is one, which lists every
+ * platform, otherwise the release's Apple Music page.
  */
 export default async function MusicPage() {
   const releases = await readReleases();
@@ -50,18 +47,7 @@ export default async function MusicPage() {
       {releases.length > 0 ? (
         <div>
           {releases.map((release, index) => {
-            // Sanity artwork wins once uploaded; the shipped covers are the
-            // fallback so the page is never empty during build-out.
-            // Guarded on isConfigured: the image builder reads the project id,
-            // which throws when Sanity isn't wired up yet.
-            const sanityCover =
-              release.cover && env.sanity.isConfigured
-                ? urlForImage(release.cover).width(1200).height(1200).url()
-                : undefined;
-            const fallback = RELEASE_COVERS[release.title];
-            const coverSrc = sanityCover ?? fallback?.src;
-            const coverAlt =
-              fallback?.alt ?? `Cover artwork for ${release.title}`;
+            const cover = releaseCover(release);
 
             return (
               <article
@@ -69,11 +55,11 @@ export default async function MusicPage() {
                 className="border-t border-smoke px-gutter py-void"
               >
                 <div className="grid grid-cols-1 gap-gap md:grid-cols-[minmax(0,26rem)_1fr] md:gap-void">
-                  {coverSrc ? (
+                  {cover ? (
                     <div className="hs-grain relative aspect-square overflow-hidden">
                       <Image
-                        src={coverSrc}
-                        alt={coverAlt}
+                        src={cover.src}
+                        alt={cover.alt}
                         fill
                         priority={index === 0}
                         sizes="(min-width: 768px) 26rem, 100vw"
@@ -112,28 +98,13 @@ export default async function MusicPage() {
                       </ol>
                     ) : null}
 
-                    {release.links && release.links.length > 0 ? (
-                      <ul className="mt-gap flex flex-wrap gap-block">
-                        {release.links.map((link) => (
-                          <li key={link.url}>
-                            <a
-                              href={link.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="hs-label inline-flex items-center gap-tight whitespace-nowrap border border-smoke px-[28px] py-block text-ink-white no-underline transition-colors duration-[120ms] ease-[steps(2,end)] hover:bg-ink-raised hover:text-flash"
-                            >
-                              {link.platform}
-                              <ArrowUpRight className="text-[1.15em]" />
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p className="hs-meta mt-gap text-smoke">
-                        Streaming links haven&rsquo;t been added for this
-                        release yet.
-                      </p>
-                    )}
+                    {release.streamUrl ? (
+                      <div className="mt-gap">
+                        <PosterButton href={release.streamUrl} external>
+                          Stream
+                        </PosterButton>
+                      </div>
+                    ) : null}
                   </div>
                 </div>
               </article>

@@ -2,7 +2,7 @@ import { cacheTag } from "next/cache";
 import { getSanityClient } from "./client";
 import { CACHE_TAGS } from "@/lib/cache-tags";
 import { env } from "@/lib/env";
-import type { Show, Release, GalleryImage, SiteSettings } from "./types";
+import type { Show, GalleryImage, SiteSettings } from "./types";
 
 const SHOW_FIELDS = /* groq */ `
   _id, date, venue, city, country, ticketUrl,
@@ -46,18 +46,6 @@ export async function getNextShow(): Promise<Show | null> {
 
   return getSanityClient().fetch<Show | null>(
     /* groq */ `*[_type == "show" && date >= now() && cancelled != true] | order(date asc)[0] { ${SHOW_FIELDS} }`,
-  );
-}
-
-export async function getReleases(): Promise<Release[]> {
-  "use cache";
-  cacheTag(CACHE_TAGS.releases);
-  if (!env.sanity.isConfigured) return [];
-
-  return getSanityClient().fetch<Release[]>(
-    /* groq */ `*[_type == "release"] | order(releaseDate desc) {
-      _id, title, type, cover, releaseDate, links, tracklist
-    }`,
   );
 }
 

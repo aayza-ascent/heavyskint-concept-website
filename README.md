@@ -35,7 +35,6 @@ rather than a broken editor.
 | `pnpm typecheck` | Route typegen, then `tsc --noEmit` |
 | `pnpm lint` | ESLint |
 | `pnpm detect` | Design detector — scans for contrast, rhythm and overflow defects |
-| `pnpm seed` | One-off: writes the fixture shows and releases into Sanity |
 
 CI runs typecheck, lint, build and detect on every push and pull request, with
 no secrets set — which is a real test, since the site is built to render empty

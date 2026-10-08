@@ -11,6 +11,8 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "cdn.sanity.io" },
       // Shopify CDN — product imagery. Never proxy these through our origin.
       { protocol: "https", hostname: "cdn.shopify.com" },
+      // Apple Music artwork — release covers, from the iTunes lookup API.
+      { protocol: "https", hostname: "*.mzstatic.com" },
     ],
   },
 };

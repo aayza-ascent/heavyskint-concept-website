@@ -35,13 +35,11 @@ export async function GET() {
       const label = TYPE_LABEL[release.type];
       /*
        * A release has no page of its own, so every item points at /music. The
-       * guid is the Sanity document id and is marked not-a-permalink, which is
+       * guid is the Apple release id and is marked not-a-permalink, which is
        * what keeps a reader from treating six items sharing one link as one
        * item.
        */
-      const links = (release.links ?? [])
-        .map((link) => `${link.platform}: ${link.url}`)
-        .join("\n");
+      const links = release.streamUrl ? `Listen: ${release.streamUrl}` : "";
 
       return `    <item>
       <title>${escapeXml(release.title)}</title>

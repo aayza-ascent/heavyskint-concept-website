@@ -6,13 +6,16 @@ import {
   getUpcomingShows,
   getPastShows,
   getNextShow,
-  getReleases,
   getSiteSettings,
 } from "@/lib/sanity/queries";
-import { getBandsintownUpcomingShows } from "@/lib/bandsintown";
+import {
+  getBandsintownUpcomingShows,
+  getBandsintownPastShows,
+} from "@/lib/bandsintown";
+import { getAppleReleases } from "@/lib/apple-music";
 import { safe } from "@/lib/safe";
 import { env } from "@/lib/env";
-import { SHOWS, RELEASES, upcomingShows, pastShows } from "@/lib/fixtures";
+import { SHOWS, upcomingShows, pastShows } from "@/lib/fixtures";
 import type { FixtureShow } from "@/lib/fixtures";
 import { MERCH, merchByHandle } from "@/lib/fixtures-merch";
 import { getProducts, getProduct } from "@/lib/shopify/queries";
@@ -91,9 +94,9 @@ async function fixtureShowSplit(): Promise<{
 }
 
 /**
- * Upcoming shows come from Bandsintown once it is configured, ahead of both
- * Sanity and the fixtures — it is real data, so even development reads it.
- * Past shows are untouched: that archive lives in Sanity.
+ * Shows come from Bandsintown once it is configured, ahead of both Sanity and
+ * the fixtures — it is real data, so even development reads it. The Sanity
+ * and fixture paths remain only for a checkout without the key.
  */
 const useBandsintown = env.bandsintown.isConfigured;
 
@@ -109,6 +112,9 @@ export async function readUpcomingShows(): Promise<Show[]> {
 }
 
 export async function readPastShows(): Promise<Show[]> {
+  if (useBandsintown) {
+    return safe("pastShows", getBandsintownPastShows, []);
+  }
   if (useFixtures) {
     fixtureNotice("pastShows");
     return (await fixtureShowSplit()).past;
@@ -128,12 +134,12 @@ export async function readNextShow(): Promise<Show | null> {
   return safe("nextShow", getNextShow, null);
 }
 
+/**
+ * Releases come from Apple Music, which needs no key, so there is no fixture
+ * or Sanity path: development and production read the same list.
+ */
 export async function readReleases(): Promise<Release[]> {
-  if (useFixtures) {
-    fixtureNotice("releases");
-    return RELEASES;
-  }
-  return safe("releases", getReleases, []);
+  return safe("releases", getAppleReleases, []);
 }
 
 /**
