@@ -109,8 +109,8 @@ export default async function AboutPage() {
 
         <div className="hs-grain relative aspect-[4/5] overflow-hidden">
           <Image
-            src={IMAGES.liveBacklit.src}
-            alt={IMAGES.liveBacklit.alt}
+            src={IMAGES.bandGroup.src}
+            alt={IMAGES.bandGroup.alt}
             fill
             sizes="(min-width: 768px) 24rem, 100vw"
             className="object-cover"

@@ -30,6 +30,16 @@ export type SiteImage = {
 };
 
 export const IMAGES = {
+  bandGroup: {
+    src: "/press/band-alley-group.webp",
+    width: 1400,
+    height: 2100,
+    alt: "heavyskint, all five, in black and white in a narrow alley between corrugated walls — Jacob Hunter at the front in a white track jacket, the other four behind him.",
+    // A full-resolution press shot supplied by the band (IMG_7285, downscaled
+    // from 4480×6720). Photographer still to confirm.
+    credit: null,
+    creditConfirmed: false,
+  },
   bandAlley: {
     src: "/press/band-alley.webp",
     width: 2400,
