@@ -38,7 +38,7 @@ export default async function AboutPage() {
     <>
       <PageHeading title="about" />
 
-      <section className="grid grid-cols-1 gap-void border-t border-smoke px-gutter py-void md:grid-cols-[1fr_minmax(0,24rem)] md:gap-chasm">
+      <section className="grid grid-cols-1 gap-void border-t border-smoke px-gutter py-void lg:grid-cols-[1fr_minmax(0,34rem)] lg:gap-chasm">
         <div>
           {settings?.bio ? (
             <div className="hs-body whitespace-pre-line text-ink-white">
@@ -107,12 +107,12 @@ export default async function AboutPage() {
           </ul>
         </div>
 
-        <div className="hs-grain relative aspect-[4/5] overflow-hidden">
+        <div className="hs-grain relative aspect-[4/5] w-full max-w-[34rem] overflow-hidden">
           <Image
             src={IMAGES.bandGroup.src}
             alt={IMAGES.bandGroup.alt}
             fill
-            sizes="(min-width: 768px) 24rem, 100vw"
+            sizes="(min-width: 544px) 34rem, 100vw"
             className="object-cover"
           />
         </div>

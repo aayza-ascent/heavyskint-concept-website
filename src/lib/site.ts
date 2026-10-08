@@ -1,3 +1,5 @@
+import type { Brand } from "@/components/ui/BrandIcon";
+
 /**
  * The site's own public identity.
  *
@@ -51,3 +53,40 @@ export const STREAMING: readonly { platform: string; url: string }[] = [
   //   url: "https://music.apple.com/gb/artist/heavyskint/1779969828",
   // },
 ];
+
+/**
+ * The band's profiles, as listed on linktr.ee/heavyskint (copied 8 Oct 2026,
+ * tracking parameters removed). Shown as icons in the footer of every page.
+ */
+export const SOCIALS = [
+  {
+    brand: "Instagram",
+    label: "Instagram",
+    url: "https://www.instagram.com/heavyskint",
+  },
+  {
+    brand: "TikTok",
+    label: "TikTok",
+    url: "https://www.tiktok.com/@heavyskint",
+  },
+  {
+    brand: "Spotify",
+    label: "Spotify",
+    url: "https://open.spotify.com/artist/70RKsp6wffaFI7Qfzct3cT",
+  },
+  {
+    brand: "YouTube",
+    label: "YouTube",
+    url: "https://www.youtube.com/@heavyskint",
+  },
+  {
+    brand: "AppleMusic",
+    label: "Apple Music",
+    url: "https://music.apple.com/gb/artist/heavyskint/1779969828",
+  },
+  {
+    brand: "Bandsintown",
+    label: "Bandsintown",
+    url: "https://www.bandsintown.com/a/15594545",
+  },
+] as const satisfies readonly { brand: Brand; label: string; url: string }[];

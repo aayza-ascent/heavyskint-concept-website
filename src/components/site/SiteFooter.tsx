@@ -2,21 +2,21 @@ import Link from "next/link";
 import { Wordmark } from "@/components/ui/Wordmark";
 import { ArrowUpRight } from "@/components/ui/Icon";
 import { readSiteSettings } from "@/lib/content";
-import { MERCH_ONLINE } from "@/lib/site";
+import { BrandIcon } from "@/components/ui/BrandIcon";
+import { MERCH_ONLINE, SOCIALS } from "@/lib/site";
 
 /**
  * Footer.
  *
- * Socials and the press kit come from Sanity so the band controls them, and
- * render as absent when unset — a fabricated Spotify URL in the footer of every
- * page is worse than no link at all.
+ * The band's profiles are the six on their Linktree (SOCIALS in site.ts), as
+ * icons on every page. The press kit comes from Sanity and renders as absent
+ * when unset.
  *
  * The mark sits large at the bottom edge, dissolving into the dither: the sheet
  * running out rather than a section ending.
  */
 export async function SiteFooter() {
   const settings = await readSiteSettings();
-  const socials = settings?.socials ?? [];
 
   return (
     <footer className="mt-chasm border-t border-smoke">
@@ -41,26 +41,26 @@ export async function SiteFooter() {
             ) : null}
           </div>
 
-          {socials.length > 0 ? (
-            <div>
-              <h2 className="hs-label text-smoke">Elsewhere</h2>
-              <ul className="mt-block flex flex-col gap-tight">
-                {socials.map((social) => (
-                  <li key={social.url}>
-                    <a
-                      href={social.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hs-label inline-flex items-center gap-tight text-ink-white no-underline transition-colors duration-[120ms] ease-[steps(2,end)] hover:text-flash"
-                    >
-                      {social.platform}
-                      <ArrowUpRight className="text-[1.15em]" />
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
+          <div>
+            <h2 className="hs-label text-smoke">Elsewhere</h2>
+            <ul className="mt-block -ml-[10px] flex flex-wrap">
+              {SOCIALS.map((social) => (
+                <li key={social.url}>
+                  {/* 44px square: the icon is small, the target is not. */}
+                  <a
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`heavyskint on ${social.label}`}
+                    title={social.label}
+                    className="flex h-[44px] w-[44px] items-center justify-center text-ink-white transition-colors duration-[120ms] ease-[steps(2,end)] hover:text-flash focus-visible:outline-2 focus-visible:outline-flash focus-visible:outline-offset-2"
+                  >
+                    <BrandIcon brand={social.brand} className="text-[24px]" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
 
           {settings?.pressKitUrl ? (
             <div>

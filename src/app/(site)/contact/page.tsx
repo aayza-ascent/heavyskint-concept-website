@@ -80,7 +80,7 @@ export default async function ContactPage(props: PageProps<"/contact">) {
   return (
     <>
       <PageHeading title="contact">
-        Booking, press, or anything else. This reaches the band directly.
+        Booking, press, or anything else.
       </PageHeading>
 
       <section className="border-t border-smoke px-gutter py-void">
@@ -96,12 +96,7 @@ export default async function ContactPage(props: PageProps<"/contact">) {
             method="post"
             className="flex flex-col gap-step"
           >
-            <Field
-              name="name"
-              label="Your name"
-              required
-              autoComplete="name"
-            />
+            <Field name="name" label="Your name" required autoComplete="name" />
             <Field
               name="email"
               label="Email"
