@@ -107,7 +107,7 @@ export async function SiteFooter() {
             named photographers and the site leans on it entirely.
           */}
           <p className="hs-meta text-smoke">
-            Photography by Daniel Blake Visuals and others
+            Photography by Daniel Blake Visuals and Adam Strachan
           </p>
         </div>
       </div>

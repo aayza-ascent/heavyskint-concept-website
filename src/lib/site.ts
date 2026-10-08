@@ -39,13 +39,15 @@ export const MERCH_ONLINE = false;
  * Verified against each platform on 5 Oct 2026: both profiles list exactly the
  * three singles in `fixtures.ts`. Per-release links live on each release.
  */
-export const STREAMING = [
-  {
-    platform: "Spotify",
-    url: "https://open.spotify.com/artist/70RKsp6wffaFI7Qfzct3cT",
-  },
-  {
-    platform: "Apple Music",
-    url: "https://music.apple.com/gb/artist/heavyskint/1779969828",
-  },
-] as const;
+// Typed explicitly so the list can be emptied without the pages' types
+// collapsing to `never`.
+export const STREAMING: readonly { platform: string; url: string }[] = [
+  // {
+  //   platform: "Spotify",
+  //   url: "https://open.spotify.com/artist/70RKsp6wffaFI7Qfzct3cT",
+  // },
+  // {
+  //   platform: "Apple Music",
+  //   url: "https://music.apple.com/gb/artist/heavyskint/1779969828",
+  // },
+];

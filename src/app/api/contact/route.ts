@@ -2,6 +2,12 @@ import { NextResponse, type NextRequest } from "next/server";
 import { Resend } from "resend";
 import { env } from "@/lib/env";
 
+/** Where booking enquiries go. Both receive the same email. */
+const BOOKING_RECIPIENTS = [
+  "rod@postelectricartists.com",
+  "info@badhead.uk",
+] as const;
+
 /**
  * Booking and press enquiries.
  *
@@ -111,11 +117,12 @@ export async function POST(request: NextRequest) {
 
   try {
     const resend = new Resend(env.resendApiKey);
-    await resend.emails.send({
+    const { error } = await resend.emails.send({
       // Must be a verified domain in Resend. Once the band's domain is live
       // this becomes something like "site@heavyskint.com".
       from: `heavyskint site <onboarding@resend.dev>`,
-      to: [env.bookingEmailTo],
+      // One email with both on the To line, so each sees the other got it.
+      to: [...BOOKING_RECIPIENTS],
       replyTo: email,
       subject: `Booking enquiry — ${safeName}`,
       text: [
@@ -127,6 +134,8 @@ export async function POST(request: NextRequest) {
         "— Sent from the contact form on heavyskint.",
       ].join("\n"),
     });
+    // Resend reports a rejected send in the result rather than by throwing.
+    if (error) throw error;
   } catch (error) {
     // Logged so a delivery outage is visible in Vercel logs rather than
     // looking to the band like nobody is getting in touch.

@@ -157,9 +157,16 @@ export const SHOWS: FixtureShow[] = [
 ];
 
 /**
- * Real press quotes, usable as-is with attribution. This is the complete set —
- * PRODUCT.md records that no other press exists, and nothing here may be
- * invented or embellished.
+ * Real press quotes, usable as-is with attribution. Nothing here may be
+ * invented or embellished, and every entry is the outlet's own words, never
+ * the band's bio or a press release reprinted under the outlet's name.
+ *
+ * The last two were checked word for word against the published articles on
+ * 8 Oct 2026:
+ *   music is to blame — "heavyskint Unveil The Gritty 'When Are You Coming For
+ *     Me Jesus?'", Lana Williams, Feb 2026
+ *   Brig Newspaper — "Rising Glasgow Band Back up Live Hype With Explosive
+ *     Second Single", Deaglán Murray, 4 Mar 2026
  */
 export const PRESS = [
   { quote: "Chaos done right", source: "Music News Monthly" },
@@ -170,6 +177,16 @@ export const PRESS = [
   {
     quote: "Equal parts vintage rock and youthful recklessness",
     source: "The Indie Scene",
+  },
+  {
+    quote:
+      "heavyskint are a band on the rise - and one that would be entirely unwise to underestimate",
+    source: "music is to blame",
+  },
+  {
+    quote:
+      "Just two singles in, they sound like a band determined to make themselves impossible to ignore",
+    source: "Brig Newspaper",
   },
 ] as const;
 

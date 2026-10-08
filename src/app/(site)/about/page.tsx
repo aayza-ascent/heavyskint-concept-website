@@ -47,22 +47,48 @@ export default async function AboutPage() {
           ) : (
             <div className="hs-body text-ink-white">
               <p>
+                Since forming last year, heavyskint have wasted no time in
+                establishing themselves as ones to watch. Initially a bedroom
+                side project, since coming together Summer ‘25 the band have
+                since sold out every show they have played to date including
+                turns at iconic Glasgow venues as King Tuts and QMU, as well as
+                Edinburgh Sneaky Petes. Fronted by the enigmatic Jacob Hunter,
+                the raw, unpredictable nature of such performances have gained
+                the band a growing following across Scotland.
+              </p>
+              <p className="mt-step">
                 Hailing from Glasgow, heavyskint have quickly established
                 themselves as a strong presence in Scottish music since their
                 emergence in early 2025. To this date they have sold out every
-                show they have played across the country.
+                show they have played across the country. These raw and
+                unpredictable performances have gained the band a growing
+                reputation that saw them recognised as one of the country’s most
+                exciting live acts at the most recent Scottish Live Music
+                Awards. heavyskint&rsquo;s sound draws upon 90s shoegaze, grunge and
+                alt rock coupled with a soulful tinge and an unfiltered
+                intensity that marks them out as a distinct force within modern
+                guitar music.
               </p>
               <p className="mt-step">
-                These raw and unpredictable performances have gained the band a
-                growing reputation that saw them recognised as one of the
-                country&rsquo;s most exciting live acts at the most recent
-                Scottish Live Music Awards.
+                With a line-up completed by Jamie Kelly, Joel Walker, Sean
+                Reilly and Maddie Tommasset , heavyskint came together through
+                the Glasgow scene, the unifying force of music overriding the
+                wildly different experiences and backgrounds within the group.
+                Such diversity within the group is shown in their audience, with
+                a heavyskint show bringing groups of people together that would
+                never otherwise exist in the same room. All ages, sexualities,
+                genders and identities coming together; as an outlet for
+                personal frustrations whilst also celebrating the broader
+                community and vital sound of Scottish youth.
               </p>
               <p className="mt-step">
-                heavyskint&rsquo;s sound draws upon 90s shoegaze, grunge and alt
-                rock coupled with a soulful tinge and an unfiltered intensity
-                that marks them out as a distinct force within modern guitar
-                music.
+                Drawing upon influences of modern indie-rock while possessing
+                the brooding, spacious vintage of Pink Floyd and the
+                confrontational edge of 90’s acts such as The Verve and
+                Spiritualized. Moody atmosphere, big choruses, noisy guitars,
+                and high intensity. The sound of a band that sources its musical
+                strength in dark places, finding therapy from respective
+                struggles with addiction, sexuality, religion and grief.
               </p>
             </div>
           )}

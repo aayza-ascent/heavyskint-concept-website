@@ -92,15 +92,19 @@ export const env = {
   get resendApiKey() {
     return required("RESEND_API_KEY");
   },
-  get bookingEmailTo() {
-    return required("BOOKING_EMAIL_TO");
-  },
-  /**
-   * Resend segment the mailing list signs people up to. Optional: until it is
-   * set, the sign-up form says sign-ups aren't open yet instead of failing.
-   */
-  get newsletterSegmentId() {
-    return optional("RESEND_NEWSLETTER_SEGMENT_ID");
+  // --- Mailchimp (mailing list) ---
+  mailchimp: {
+    /**
+     * Optional: until it is set, the sign-up form hands visitors to the
+     * band's Mailchimp landing page instead of signing them up on the site.
+     */
+    get apiKey() {
+      return optional("MAILCHIMP_API_KEY");
+    },
+    /** The heavyskint audience. */
+    get audienceId() {
+      return process.env.MAILCHIMP_AUDIENCE_ID ?? "21aced4eee";
+    },
   },
 
   get siteUrl() {

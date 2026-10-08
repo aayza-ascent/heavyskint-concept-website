@@ -58,4 +58,4 @@ export function missingTraderDetails(): string[] {
  * and an unstable value would also fail the prerender under Cache Components.
  * Update it whenever either policy is edited.
  */
-export const POLICY_LAST_UPDATED = "2026-09-08";
+export const POLICY_LAST_UPDATED = "2026-10-08";

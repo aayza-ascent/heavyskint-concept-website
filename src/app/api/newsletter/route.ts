@@ -1,14 +1,18 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { Resend } from "resend";
+import { createHash } from "node:crypto";
 import { env } from "@/lib/env";
 
 /**
  * Mailing list sign-up.
  *
- * Adds the address as a Resend contact in the band's segment. Resend then owns
- * the list: broadcasts are sent from its dashboard, and every broadcast carries
- * an unsubscribe link Resend honours itself, so there is no unsubscribe route
+ * Adds the address to the band's Mailchimp audience. Mailchimp then owns the
+ * list: campaigns are sent from its dashboard, and every campaign carries an
+ * unsubscribe link Mailchimp honours itself, so there is no unsubscribe route
  * to build or keep working here.
+ *
+ * New addresses go in as "pending", so Mailchimp sends a confirmation email
+ * and nobody is on the list without having clicked it. That is double opt-in,
+ * which is what makes the consent provable under PECR.
  *
  * Same protections as the contact form — honeypot, minimum time-on-page, and
  * per-IP rate limiting — because an open sign-up form is how a list fills with
@@ -16,6 +20,48 @@ import { env } from "@/lib/env";
  */
 
 const MAX_EMAIL_LENGTH = 200;
+
+/** The band's hosted sign-up page, used when the API key isn't set. */
+const MAILCHIMP_LANDING_PAGE = "https://mailchi.mp/dbc5812d8359/heavyskint";
+
+/**
+ * Adds or re-adds an address, returning the notice to show.
+ *
+ * A PUT to the member's hash is idempotent: a new address is created pending,
+ * and someone already on the list is told so instead of shown an error. A
+ * past unsubscriber who signs up again is set back to pending, so they confirm
+ * by email like anyone new.
+ */
+async function subscribe(apiKey: string, email: string): Promise<string> {
+  // The key ends in its datacentre, e.g. "…-us22", which names the API host.
+  const dc = apiKey.split("-").pop();
+  const hash = createHash("md5").update(email).digest("hex");
+  const url = `https://${dc}.api.mailchimp.com/3.0/lists/${env.mailchimp.audienceId}/members/${hash}`;
+  const headers = {
+    Authorization: `Basic ${Buffer.from(`heavyskint:${apiKey}`).toString("base64")}`,
+    "Content-Type": "application/json",
+  };
+
+  const put = (body: Record<string, string>) =>
+    fetch(url, { method: "PUT", headers, body: JSON.stringify(body) });
+
+  let response = await put({ email_address: email, status_if_new: "pending" });
+  let member = (await response.json()) as { status?: string; title?: string };
+
+  if (response.ok && (member.status === "unsubscribed" || member.status === "cleaned")) {
+    response = await put({ email_address: email, status: "pending" });
+    member = await response.json();
+  }
+
+  if (!response.ok) {
+    // Mailchimp rejects addresses it judges fake or undeliverable as an
+    // "Invalid Resource" — to the visitor, that is a bad address.
+    if (member.title === "Invalid Resource") return "email";
+    throw new Error(`${response.status} ${member.title ?? ""}`.trim());
+  }
+
+  return member.status === "subscribed" ? "already" : "confirm";
+}
 const MIN_SECONDS_ON_PAGE = 2;
 const RATE_LIMIT = { max: 5, windowMs: 60 * 60 * 1000 } as const;
 
@@ -90,35 +136,20 @@ export async function POST(request: NextRequest) {
     return back(request, "email");
   }
 
-  // Not configured is a real state before launch, not a failure: say so
-  // honestly rather than pretend the address was saved.
-  const segmentId = env.newsletterSegmentId;
-  if (!segmentId || !process.env.RESEND_API_KEY) {
-    console.warn(
-      "[newsletter] RESEND_NEWSLETTER_SEGMENT_ID or RESEND_API_KEY unset",
-    );
-    return back(request, "unavailable");
+  // Without an API key the sign-up still works: the visitor finishes on the
+  // band's Mailchimp page instead of on the site.
+  const apiKey = env.mailchimp.apiKey;
+  if (!apiKey) {
+    console.warn("[newsletter] MAILCHIMP_API_KEY unset, sending to landing page");
+    return NextResponse.redirect(MAILCHIMP_LANDING_PAGE, 303);
   }
 
   try {
-    const resend = new Resend(env.resendApiKey);
-    const { error } = await resend.contacts.create({
-      email,
-      unsubscribed: false,
-      segments: [{ id: segmentId }],
-    });
-    // Someone signing up twice is already on the list — tell them so, rather
-    // than reporting a failure for getting what they asked for.
-    if (error && !/already exists/i.test(error.message)) {
-      console.error("[newsletter] create contact failed:", error);
-      return back(request, "error");
-    }
+    return back(request, await subscribe(apiKey, email));
   } catch (error) {
-    console.error("[newsletter] create contact failed:", error);
+    console.error("[newsletter] Mailchimp subscribe failed:", error);
     return back(request, "error");
   }
-
-  return back(request, "subscribed");
 }
 
 /** A GET here is someone pasting the URL; send them to the form. */

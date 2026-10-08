@@ -7,8 +7,8 @@ import { FormTimestamp } from "@/components/ui/FormTimestamp";
  *
  * A plain form POST to /api/newsletter, for the same reason the contact form
  * is one: it works with JavaScript off and fails as a page load rather than
- * silently. The handler redirects back to `#mailing-list` with
- * `?newsletter=<status>`, which the notice below reads.
+ * silently. The handler signs the address up with Mailchimp and redirects back
+ * to `#mailing-list` with `?newsletter=<status>`, which the notice below reads.
  *
  * Consent is the act of submitting this form, so the copy says exactly what
  * people are signing up to and that they can leave — PECR wants it specific
@@ -19,6 +19,14 @@ const MESSAGES: Record<string, { tone: "ok" | "problem"; text: string }> = {
   subscribed: {
     tone: "ok",
     text: "You're on the list. New shows and releases will reach you first.",
+  },
+  confirm: {
+    tone: "ok",
+    text: "Nearly there — check your inbox and confirm, and you're on the list.",
+  },
+  already: {
+    tone: "ok",
+    text: "You're already on the list. New shows and releases will reach you first.",
   },
   email: {
     tone: "problem",

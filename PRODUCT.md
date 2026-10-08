@@ -141,6 +141,8 @@ actions; checkout is a redirect to `cart.checkoutUrl`. Payment never touches our
 - "Chaos done right" — *Music News Monthly*
 - "They are going to be all over the UK, if not, the world" — *It's All Indie*
 - "Equal parts vintage rock and youthful recklessness" — *The Indie Scene*
+- "heavyskint are a band on the rise - and one that would be entirely unwise to underestimate" — *music is to blame*
+- "Just two singles in, they sound like a band determined to make themselves impossible to ignore" — *Brig Newspaper*
 
 **Real proof points:** sold out every show played across Scotland since emerging in early 2025;
 recognised as one of the country's most exciting live acts at the most recent Scottish Live Music
@@ -155,7 +157,7 @@ surfaces that depend on them can be built.
 
 **Absences that must never be fabricated:** no streaming or follower counts, no ticket or merch sales
 figures, no customer testimonials, no venue or festival names beyond what the band supplies, no
-merch pricing, no release titles or dates. Press quotes are limited to the three above.
+merch pricing, no release titles or dates. Press quotes are limited to the five above.
 
 ## Product Principles
 
