@@ -1,5 +1,7 @@
 # heavyskint.
 
+deploy check: 1
+
 The band's site. Next.js 16 (App Router, Turbopack, Cache Components), Sanity
 for content, Shopify Storefront for merch.
 
