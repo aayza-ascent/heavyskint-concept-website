@@ -13,16 +13,22 @@ import type { Release } from "@/lib/sanity/types";
  * It is cached for a few hours, so a new single shows up on the site within the
  * day it goes live on Apple Music.
  *
- * The one thing Apple can't supply is the band's own smart link, so those are
- * kept below by Apple's release id. A release with no smart link yet falls back
- * to its Apple Music page, so it never shows without a button.
+ * The one thing Apple can't supply is the band's own smart link. Each release
+ * looks for one in this order:
+ *   1. STREAM_LINKS below, by Apple's release id — for links that don't follow
+ *      the pattern, and to override a guess.
+ *   2. heavyskint.ffm.to/<title>, the pattern the band's ffm.to links follow:
+ *      the title in lower case with everything but letters and digits removed.
+ *      Used only if that page exists.
+ *   3. The release's Apple Music page, so it never shows without a button.
  */
 const ARTIST_ID = "1779969828";
 
-/** Smart links by Apple collection id. Add a line when a release gets one. */
+/**
+ * Smart links by Apple collection id. Only needed for a link the ffm.to
+ * pattern won't find, such as one on another service.
+ */
 const STREAM_LINKS: Record<string, string> = {
-  "1838540833": "https://heavyskint.ffm.to/vice",
-  "1866899588": "https://heavyskint.ffm.to/whenareyoucomingformejesus",
   "6765784563": "https://vm.group/he-says-she-says-cse-t",
 };
 
@@ -73,6 +79,29 @@ function parseName(name: string): Pick<Release, "title" | "type"> {
   return { title, type };
 }
 
+/** "When Are You Coming For Me Jesus?" → heavyskint.ffm.to/whenareyoucomingformejesus */
+function ffmUrl(title: string): string {
+  return `https://heavyskint.ffm.to/${title.toLowerCase().replace(/[^a-z0-9]/g, "")}`;
+}
+
+/**
+ * Whether a smart link exists. ffm.to answers 200 for a live link and 404 for
+ * anything else. A slow or failed check counts as missing, so ffm.to being
+ * down costs a release its smart link for one cache period, not the page.
+ */
+async function exists(url: string): Promise<boolean> {
+  try {
+    const response = await fetch(url, {
+      method: "HEAD",
+      redirect: "manual",
+      signal: AbortSignal.timeout(5000),
+    });
+    return response.status === 200;
+  } catch {
+    return false;
+  }
+}
+
 /** Releases, newest first. */
 export async function getAppleReleases(): Promise<Release[]> {
   "use cache";
@@ -90,9 +119,9 @@ export async function getAppleReleases(): Promise<Release[]> {
   // Apple can list a clean and an explicit version of the same release.
   const seen = new Set<string>();
 
-  return collections
+  const releases = collections
     .sort((a, b) => b.releaseDate.localeCompare(a.releaseDate))
-    .flatMap((collection): Release[] => {
+    .flatMap((collection): (Release & { appleUrl: string })[] => {
       const { title, type } = parseName(collection.collectionName);
       if (seen.has(title)) return [];
       seen.add(title);
@@ -117,9 +146,22 @@ export async function getAppleReleases(): Promise<Release[]> {
             /\/\d+x\d+bb\./,
             "/1200x1200bb.",
           ),
-          streamUrl: STREAM_LINKS[id] ?? collection.collectionViewUrl,
+          streamUrl: STREAM_LINKS[id],
+          appleUrl: collection.collectionViewUrl,
           tracklist,
         },
       ];
     });
+
+  // Checked in parallel, and only for releases without a listed link.
+  return Promise.all(
+    releases.map(async ({ appleUrl, ...release }) => {
+      if (release.streamUrl) return release;
+      const guess = ffmUrl(release.title);
+      return {
+        ...release,
+        streamUrl: (await exists(guess)) ? guess : appleUrl,
+      };
+    }),
+  );
 }
