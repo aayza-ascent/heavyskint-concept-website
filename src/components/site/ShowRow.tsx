@@ -48,7 +48,7 @@ export function ShowRow({ show, past = false }: { show: Show; past?: boolean }) 
         ) : null}
       </div>
 
-      <div className="mt-tight flex items-center gap-block sm:col-start-3 sm:mt-0 sm:justify-self-end">
+      <div className="mt-tight flex flex-wrap items-center gap-block sm:col-start-3 sm:mt-0 sm:justify-self-end">
         <ShowStatus soldOut={show.soldOut} cancelled={show.cancelled} />
         {!past && !unavailable && show.ticketUrl ? (
           <PosterButton href={show.ticketUrl} external>
@@ -57,6 +57,16 @@ export function ShowRow({ show, past = false }: { show: Show; past?: boolean }) 
         ) : null}
         {!past && !unavailable && !show.ticketUrl ? (
           <span className="hs-label text-smoke">On sale soon</span>
+        ) : null}
+        {!past && !unavailable && !show.ticketUrl && show.notifyUrl ? (
+          <PosterButton href={show.notifyUrl} variant="ghost" external>
+            Notify me
+          </PosterButton>
+        ) : null}
+        {!past && !unavailable && show.ticketUrl && show.rsvpUrl ? (
+          <PosterButton href={show.rsvpUrl} variant="ghost" external>
+            RSVP
+          </PosterButton>
         ) : null}
       </div>
     </li>

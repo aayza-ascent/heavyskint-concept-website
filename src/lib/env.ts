@@ -77,6 +77,17 @@ export const env = {
     },
   },
 
+  // --- Bandsintown (upcoming shows) ---
+  bandsintown: {
+    /** Whether the Bandsintown feed is wired up. See sanity.isConfigured. */
+    get isConfigured() {
+      return Boolean(process.env.BANDSINTOWN_APP_ID);
+    },
+    get appId() {
+      return required("BANDSINTOWN_APP_ID");
+    },
+  },
+
   // --- Email (booking / contact) ---
   get resendApiKey() {
     return required("RESEND_API_KEY");

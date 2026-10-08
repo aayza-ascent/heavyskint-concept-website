@@ -9,6 +9,7 @@ import {
   getReleases,
   getSiteSettings,
 } from "@/lib/sanity/queries";
+import { getBandsintownUpcomingShows } from "@/lib/bandsintown";
 import { safe } from "@/lib/safe";
 import { env } from "@/lib/env";
 import { SHOWS, RELEASES, upcomingShows, pastShows } from "@/lib/fixtures";
@@ -89,7 +90,17 @@ async function fixtureShowSplit(): Promise<{
   return { upcoming: upcomingShows(now), past: pastShows(now) };
 }
 
+/**
+ * Upcoming shows come from Bandsintown once it is configured, ahead of both
+ * Sanity and the fixtures — it is real data, so even development reads it.
+ * Past shows are untouched: that archive lives in Sanity.
+ */
+const useBandsintown = env.bandsintown.isConfigured;
+
 export async function readUpcomingShows(): Promise<Show[]> {
+  if (useBandsintown) {
+    return safe("upcomingShows", getBandsintownUpcomingShows, []);
+  }
   if (useFixtures) {
     fixtureNotice("upcomingShows");
     return (await fixtureShowSplit()).upcoming;
@@ -106,6 +117,10 @@ export async function readPastShows(): Promise<Show[]> {
 }
 
 export async function readNextShow(): Promise<Show | null> {
+  if (useBandsintown) {
+    const upcoming = await readUpcomingShows();
+    return upcoming.find((show) => !show.cancelled) ?? null;
+  }
   if (useFixtures) {
     fixtureNotice("nextShow");
     return (await fixtureShowSplit()).upcoming[0] ?? null;
@@ -127,15 +142,17 @@ export async function readReleases(): Promise<Release[]> {
  * would rot.
  */
 export async function readSoldOutCount(): Promise<number> {
-  const shows = useFixtures
-    ? SHOWS
-    : await safe("soldOutCount", async () => {
-        const [upcoming, past] = await Promise.all([
-          getUpcomingShows(),
-          getPastShows(),
-        ]);
-        return [...upcoming, ...past];
-      }, []);
+  const shows = useBandsintown
+    ? [...(await readUpcomingShows()), ...(await readPastShows())]
+    : useFixtures
+      ? SHOWS
+      : await safe("soldOutCount", async () => {
+          const [upcoming, past] = await Promise.all([
+            getUpcomingShows(),
+            getPastShows(),
+          ]);
+          return [...upcoming, ...past];
+        }, []);
 
   return shows.filter((s) => s.soldOut && !s.cancelled).length;
 }

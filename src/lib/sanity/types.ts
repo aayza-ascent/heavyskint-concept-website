@@ -13,6 +13,10 @@ export type Show = {
   supportActs?: string[];
   /** Promoter or festival the show runs under, where one is named. */
   presentedBy?: string;
+  /** Bandsintown only: fan says they're going and gets reminders. */
+  rsvpUrl?: string;
+  /** Bandsintown only: fan is alerted when tickets go on sale. */
+  notifyUrl?: string;
 };
 
 export type ReleaseLink = {
