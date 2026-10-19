@@ -15,19 +15,26 @@ import type { Release } from "@/lib/sanity/types";
  *
  * The one thing Apple can't supply is the band's own smart link. Each release
  * looks for one in this order:
- *   1. STREAM_LINKS below, by Apple's release id — for links that don't follow
- *      the pattern, and to override a guess.
- *   2. heavyskint.ffm.to/<title>, the pattern the band's ffm.to links follow:
+ *   1. STREAM_LINKS below, by Apple's release id — to override what the site
+ *      finds, or keep a link once it leaves the Linktree.
+ *   2. The band's Linktree. Any vm.group or ffm.to link on it is matched to a
+ *      release by the title of the page it opens, so a new smart link (or a
+ *      presave link, which becomes the streaming link on release day) is
+ *      picked up as soon as it's added there, whatever the button says.
+ *   3. heavyskint.ffm.to/<title>, the pattern the band's ffm.to links follow:
  *      the title in lower case with everything but letters and digits removed.
- *      Used only if that page exists.
- *   3. The release's Apple Music page, so it never shows without a button.
+ *      Used only if that page exists. vm.group links end in a random code, so
+ *      they can't be guessed this way.
+ *   4. The release's Apple Music page, so it never shows without a button.
  */
 const ARTIST_ID = "1779969828";
 
-/**
- * Smart links by Apple collection id. Only needed for a link the ffm.to
- * pattern won't find, such as one on another service.
- */
+const LINKTREE_URL = "https://linktr.ee/heavyskint";
+
+/** Hosts of the smart link services the band has released through. */
+const SMART_LINK_HOST = /(^|\.)(vm\.group|ffm\.to)$/;
+
+/** Smart links by Apple collection id. Only needed to override the Linktree. */
 const STREAM_LINKS: Record<string, string> = {
   "6765784563": "https://vm.group/he-says-she-says-cse-t",
 };
@@ -102,6 +109,70 @@ async function exists(url: string): Promise<boolean> {
   }
 }
 
+/**
+ * A title reduced to its letters and digits, without the band's name, so a
+ * smart link page titled "heavyskint - He Says, She Says" or "Vice - heavyskint"
+ * matches the release "he says, she says" or "vice".
+ */
+function titleKey(title: string): string {
+  return title
+    .toLowerCase()
+    .replace(/&[#a-z0-9]+;/g, "")
+    .replace(/heavyskint/g, "")
+    .replace(/[^a-z0-9]/g, "");
+}
+
+/** The <title> of a page, or undefined if it can't be read in time. */
+async function pageTitle(url: string): Promise<string | undefined> {
+  try {
+    const response = await fetch(url, { signal: AbortSignal.timeout(5000) });
+    if (!response.ok) return undefined;
+    return (await response.text()).match(/<title>([^<]*)<\/title>/i)?.[1];
+  } catch {
+    return undefined;
+  }
+}
+
+/**
+ * The smart links on the band's Linktree, by title key. The links sit in the
+ * page's Next.js data. If the Linktree can't be read or its layout changes, this
+ * finds nothing and releases fall through to the ffm.to guess.
+ */
+async function linktreeSmartLinks(): Promise<Map<string, string>> {
+  const found = new Map<string, string>();
+  try {
+    const response = await fetch(LINKTREE_URL, {
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!response.ok) return found;
+    const data = (await response.text()).match(
+      /<script id="__NEXT_DATA__"[^>]*>([\s\S]*?)<\/script>/,
+    )?.[1];
+    if (!data) return found;
+
+    const links: { url?: string }[] =
+      JSON.parse(data)?.props?.pageProps?.account?.links ?? [];
+    const urls = new Set<string>();
+    for (const link of links) {
+      if (!link.url) continue;
+      const url = new URL(link.url);
+      // Drop the tracking parameters Instagram and others add.
+      if (SMART_LINK_HOST.test(url.hostname)) urls.add(url.origin + url.pathname);
+    }
+
+    await Promise.all(
+      [...urls].map(async (url) => {
+        const title = await pageTitle(url);
+        const key = title && titleKey(title);
+        if (key && !found.has(key)) found.set(key, url);
+      }),
+    );
+  } catch {
+    // Treated as no links, as above.
+  }
+  return found;
+}
+
 /** Releases, newest first. */
 export async function getAppleReleases(): Promise<Release[]> {
   "use cache";
@@ -153,10 +224,14 @@ export async function getAppleReleases(): Promise<Release[]> {
       ];
     });
 
-  // Checked in parallel, and only for releases without a listed link.
+  const linktree = await linktreeSmartLinks();
+
+  // Checked in parallel, and only for releases without a link found so far.
   return Promise.all(
     releases.map(async ({ appleUrl, ...release }) => {
       if (release.streamUrl) return release;
+      const fromLinktree = linktree.get(titleKey(release.title));
+      if (fromLinktree) return { ...release, streamUrl: fromLinktree };
       const guess = ffmUrl(release.title);
       return {
         ...release,
