@@ -13,6 +13,10 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "cdn.shopify.com" },
       // Apple Music artwork — release covers, from the iTunes lookup API.
       { protocol: "https", hostname: "*.mzstatic.com" },
+      // Smart link artwork — covers for upcoming releases, from their presave
+      // pages on vm.group (Linkfire) and ffm.to (Feature.fm).
+      { protocol: "https", hostname: "linkstorage.linkfire.com" },
+      { protocol: "https", hostname: "i.ffmcdn.com" },
     ],
   },
 };

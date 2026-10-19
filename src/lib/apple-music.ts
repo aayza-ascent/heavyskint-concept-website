@@ -122,33 +122,81 @@ function titleKey(title: string): string {
     .replace(/[^a-z0-9]/g, "");
 }
 
-/** The <title> of a page, or undefined if it can't be read in time. */
-async function pageTitle(url: string): Promise<string | undefined> {
+/** A smart link from the Linktree, with what its page says about the release. */
+export type SmartLink = {
+  /** titleKey() of the page title, for matching to an Apple release. */
+  key: string;
+  /** The title as the page gives it, in the band's lower case. */
+  title: string;
+  url: string;
+  /** Square artwork, where the page has it on a host next/image allows. */
+  coverUrl?: string;
+};
+
+const decodeEntities = (text: string) =>
+  text
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#0?39;|&apos;/g, "'");
+
+/**
+ * Square artwork from a smart link page's og:image. Linkfire (vm.group) serves
+ * a wide crop there but also a 440px square beside it; Feature.fm (ffm.to)
+ * serves a square already.
+ */
+function squareCover(image: string | undefined): string | undefined {
+  if (!image) return undefined;
+  const url = new URL(decodeEntities(image));
+  if (url.hostname === "linkstorage.linkfire.com") {
+    return url.href.replace(/artwork-\d+x\d+\.jpg$/, "artwork-440x440.jpg");
+  }
+  if (url.hostname === "i.ffmcdn.com") return url.href;
+  return undefined;
+}
+
+/** What a smart link page says about its release, or undefined if unreadable. */
+async function readSmartLink(url: string): Promise<SmartLink | undefined> {
   try {
     const response = await fetch(url, { signal: AbortSignal.timeout(5000) });
     if (!response.ok) return undefined;
-    return (await response.text()).match(/<title>([^<]*)<\/title>/i)?.[1];
+    const html = await response.text();
+    const pageTitle = html.match(/<title>([^<]*)<\/title>/i)?.[1];
+    if (!pageTitle) return undefined;
+    const key = titleKey(pageTitle);
+    if (!key) return undefined;
+
+    // "heavyskint - He Says, She Says" → "he says, she says"
+    const title = decodeEntities(pageTitle)
+      .replace(/heavyskint/i, "")
+      .replace(/^\s*[-–|:]\s*|\s*[-–|:]\s*$/g, "")
+      .trim()
+      .toLowerCase();
+    const image = html.match(/property="og:image" content="([^"]+)"/)?.[1];
+    return { key, title, url, coverUrl: squareCover(image) };
   } catch {
     return undefined;
   }
 }
 
 /**
- * The smart links on the band's Linktree, by title key. The links sit in the
- * page's Next.js data. If the Linktree can't be read or its layout changes, this
- * finds nothing and releases fall through to the ffm.to guess.
+ * The smart links on the band's Linktree, read from the page's Next.js data. If
+ * the Linktree can't be read or its layout changes, this finds nothing and
+ * releases fall through to the ffm.to guess.
  */
-async function linktreeSmartLinks(): Promise<Map<string, string>> {
-  const found = new Map<string, string>();
+async function getLinktreeSmartLinks(): Promise<SmartLink[]> {
+  "use cache";
+  cacheTag(CACHE_TAGS.releases);
+  cacheLife("hours");
+
   try {
     const response = await fetch(LINKTREE_URL, {
       signal: AbortSignal.timeout(5000),
     });
-    if (!response.ok) return found;
+    if (!response.ok) return [];
     const data = (await response.text()).match(
       /<script id="__NEXT_DATA__"[^>]*>([\s\S]*?)<\/script>/,
     )?.[1];
-    if (!data) return found;
+    if (!data) return [];
 
     const links: { url?: string }[] =
       JSON.parse(data)?.props?.pageProps?.account?.links ?? [];
@@ -160,17 +208,18 @@ async function linktreeSmartLinks(): Promise<Map<string, string>> {
       if (SMART_LINK_HOST.test(url.hostname)) urls.add(url.origin + url.pathname);
     }
 
-    await Promise.all(
-      [...urls].map(async (url) => {
-        const title = await pageTitle(url);
-        const key = title && titleKey(title);
-        if (key && !found.has(key)) found.set(key, url);
-      }),
-    );
+    const found = await Promise.all([...urls].map(readSmartLink));
+    // Two links to the same release: the first on the Linktree wins.
+    const seen = new Set<string>();
+    return found.filter((link): link is SmartLink => {
+      if (!link || seen.has(link.key)) return false;
+      seen.add(link.key);
+      return true;
+    });
   } catch {
     // Treated as no links, as above.
+    return [];
   }
-  return found;
 }
 
 /** Releases, newest first. */
@@ -224,13 +273,14 @@ export async function getAppleReleases(): Promise<Release[]> {
       ];
     });
 
-  const linktree = await linktreeSmartLinks();
+  const linktree = await getLinktreeSmartLinks();
 
   // Checked in parallel, and only for releases without a link found so far.
   return Promise.all(
     releases.map(async ({ appleUrl, ...release }) => {
       if (release.streamUrl) return release;
-      const fromLinktree = linktree.get(titleKey(release.title));
+      const key = titleKey(release.title);
+      const fromLinktree = linktree.find((link) => link.key === key)?.url;
       if (fromLinktree) return { ...release, streamUrl: fromLinktree };
       const guess = ffmUrl(release.title);
       return {
@@ -239,4 +289,18 @@ export async function getAppleReleases(): Promise<Release[]> {
       };
     }),
   );
+}
+
+/**
+ * Releases on the way: smart links on the Linktree that match nothing on Apple
+ * Music yet, which in practice means a presave. Each one drops out of here and
+ * into getAppleReleases() on its own once Apple lists the release.
+ */
+export async function getUpcomingReleases(): Promise<SmartLink[]> {
+  const [links, releases] = await Promise.all([
+    getLinktreeSmartLinks(),
+    getAppleReleases(),
+  ]);
+  const out = new Set(releases.map((release) => titleKey(release.title)));
+  return links.filter((link) => !out.has(link.key));
 }

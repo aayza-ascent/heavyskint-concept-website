@@ -12,7 +12,8 @@ import {
   getBandsintownUpcomingShows,
   getBandsintownPastShows,
 } from "@/lib/bandsintown";
-import { getAppleReleases } from "@/lib/apple-music";
+import { getAppleReleases, getUpcomingReleases } from "@/lib/apple-music";
+import type { SmartLink } from "@/lib/apple-music";
 import { safe } from "@/lib/safe";
 import { env } from "@/lib/env";
 import { SHOWS, upcomingShows, pastShows } from "@/lib/fixtures";
@@ -140,6 +141,11 @@ export async function readNextShow(): Promise<Show | null> {
  */
 export async function readReleases(): Promise<Release[]> {
   return safe("releases", getAppleReleases, []);
+}
+
+/** Presaves on the Linktree for releases Apple doesn't list yet. */
+export async function readUpcomingReleases(): Promise<SmartLink[]> {
+  return safe("upcomingReleases", getUpcomingReleases, []);
 }
 
 /**
